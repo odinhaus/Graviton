@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/StarsCartoon.png</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Font.spritefont</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Splitter.png</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Indicator.png</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/BloomCombine.fx</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/BloomExtract.fx</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/GaussianBlur.fx</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Gold.png</File>
+    <File>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Background.jpg</File>
+  </SourceFiles>
+</SourceFileCollection>

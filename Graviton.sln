@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graviton.DX", "Graviton.DX\Graviton.DX.csproj", "{DD5DBD04-7A38-46DD-B543-7E28385232F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graviton.Console", "Graviton.Console\Graviton.Console.csproj", "{0A85130D-1436-4348-B692-4CB9B2ED26C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graviton.Server", "Graviton.Server\Graviton.Server.csproj", "{EE279306-924B-46D4-BFB5-C707DBF8DE56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Graviton.Server.Tests", "Graviton.Server.Tests\Graviton.Server.Tests.csproj", "{422688D3-C9F0-4A7C-B87B-C075EB24340E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Debug|x86.ActiveCfg = Debug|x86
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Debug|x86.Build.0 = Debug|x86
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Release|Any CPU.ActiveCfg = Release|x86
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Release|x86.ActiveCfg = Release|x86
+		{DD5DBD04-7A38-46DD-B543-7E28385232F6}.Release|x86.Build.0 = Release|x86
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Debug|x86.Build.0 = Debug|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Release|x86.ActiveCfg = Release|Any CPU
+		{0A85130D-1436-4348-B692-4CB9B2ED26C8}.Release|x86.Build.0 = Release|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Debug|x86.Build.0 = Debug|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Release|x86.ActiveCfg = Release|Any CPU
+		{EE279306-924B-46D4-BFB5-C707DBF8DE56}.Release|x86.Build.0 = Release|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Debug|x86.Build.0 = Debug|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Release|x86.ActiveCfg = Release|Any CPU
+		{422688D3-C9F0-4A7C-B87B-C075EB24340E}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

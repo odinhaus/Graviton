@@ -1,0 +1,36 @@
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Genesis.DX.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Genesis.DX.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\MonoGame.Framework.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.MediaFoundation.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.XAudio2.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct3D11.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.DXGI.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct2D1.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.XInput.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.RawInput.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct3D9.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\MonoGame.Framework.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.MediaFoundation.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.XAudio2.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct3D11.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.DXGI.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct2D1.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.XInput.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.RawInput.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\SharpDX.Direct3D9.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\obj\x86\Debug\Genesis.DX.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\obj\x86\Debug\Genesis.DX.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\StarsCartoon.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\Font.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\obj\x86\Debug\Genesis.DX.csprojResolveAssemblyReference.cache
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\Splitter.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\Indicator.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\BloomCombine.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\BloomExtract.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\GaussianBlur.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\Gold.xnb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.DX\bin\Windows\Debug\Content\Background.xnb
+D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Genesis.DX.exe
+D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Genesis.DX.pdb

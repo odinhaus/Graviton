@@ -1,0 +1,9 @@
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Genesis.Server.Tests.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Genesis.Server.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Genesis.Server.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\obj\Debug\Genesis.Server.Tests.csprojResolveAssemblyReference.cache
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\obj\Debug\Genesis.Server.Tests.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\bin\Debug\Genesis.Server.Tests.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Server.Tests\obj\Debug\Genesis.Server.Tests.exe

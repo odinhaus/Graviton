@@ -1,0 +1,6 @@
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\obj\Release\Genesis.Server.csprojResolveAssemblyReference.cache
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\bin\Release\Genesis.Server.exe.config
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\bin\Release\Genesis.Server.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\bin\Release\Genesis.Server.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\obj\Release\Genesis.Server.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis.Server\obj\Release\Genesis.Server.pdb

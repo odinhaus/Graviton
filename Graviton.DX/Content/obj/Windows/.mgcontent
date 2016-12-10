@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/StarsCartoon.png</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/Font.spritefont</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/Splitter.png</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/Indicator.png</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/BloomCombine.fx</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/BloomExtract.fx</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/GaussianBlur.fx</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/Gold.png</File>
+    <File>D:/Code/Altus/Graviton/Graviton.DX/Content/Background.jpg</File>
+  </SourceFiles>
+</SourceFileCollection>

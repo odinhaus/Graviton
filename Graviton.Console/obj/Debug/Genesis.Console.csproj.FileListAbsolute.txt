@@ -1,0 +1,31 @@
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.exe.config
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.exe
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.pdb
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Common.dll
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\ICSharpCode.SharpZipLib.dll
+C:\Altus\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Common.pdb
+C:\Altus\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.csprojResolveAssemblyReference.cache
+C:\Altus\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.exe
+C:\Altus\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.exe.config
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\Genesis.Console.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.csprojResolveAssemblyReference.cache
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.exe
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\obj\Debug\Genesis.Console.pdb
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\MonoGame.Framework.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.XAudio2.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.Direct3D11.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.Direct2D1.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.DXGI.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.XInput.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.MediaFoundation.dll
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\MonoGame.Framework.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.XAudio2.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.Direct3D11.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.Direct2D1.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.DXGI.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.XInput.xml
+C:\Users\BillB\Documents\Visual Studio 2015\Projects\Genesis\Genesis\Genesis.Console\bin\Debug\SharpDX.MediaFoundation.xml
