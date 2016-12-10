@@ -19,14 +19,14 @@ namespace Graviton.Server.Tests
             var bytes = new byte[size];
             var request = new PlayerRequest()
             {
-                _KeyStateMask = 1536,
-                _Requester = 12,
-                _Vector_X = 23,
-                _Vector_Y = 43,
-                _Viewport_H = 1234,
-                _Viewport_W = 1232,
-                _Viewport_X = 300,
-                _Viewport_Y = 321
+                KeyStateMask = 1536,
+                Requester = 12,
+                Vector_X = 23,
+                Vector_Y = 43,
+                ViewPort_H = 1234,
+                ViewPort_W = 1232,
+                ViewPort_X = 300,
+                ViewPort_Y = 321
             };
 
             //fixed(byte* serialized = bytes)
@@ -50,7 +50,8 @@ namespace Graviton.Server.Tests
             sw.Start();
             for (int i = 0; i < count; i++)
             {
-                var d = PlayerRequest.Deserialize(bytes);
+                var d = new PlayerRequest();
+                d.Deserialize(bytes);
             }
             sw.Stop();
             var dTime = sw.Elapsed.TotalSeconds;
@@ -75,7 +76,8 @@ namespace Graviton.Server.Tests
             };
 
             var bytes = player.Serialize();
-            var player2 = Player.Deserialize(bytes);
+            var player2 = new Player();
+            player2.Deserialize(bytes);
             Assert.IsTrue(player2.Bounds.X == player.Bounds.X);
             Assert.IsTrue(player2.Bounds.Y == player.Bounds.Y);
             Assert.IsTrue(player2.Bounds.Width == player.Bounds.Width);
@@ -91,15 +93,15 @@ namespace Graviton.Server.Tests
             socket.Connect(new IPEndPoint(new IPAddress(new byte[] { 127, 0, 0, 1 }), 9000));
             var request = new PlayerRequest()
             {
-                _KeyStateMask = 1536,
-                _Requester = 12,
-                _Vector_X = 23,
-                _Vector_Y = 43,
-                _Viewport_H = 1234,
-                _Viewport_W = 1232,
-                _Viewport_X = 300,
-                _Viewport_Y = 321,
-                _IsValid = true
+                KeyStateMask = 1536,
+                Requester = 12,
+                Vector_X = 23,
+                Vector_Y = 43,
+                ViewPort_H = 1234,
+                ViewPort_W = 1232,
+                ViewPort_X = 300,
+                ViewPort_Y = 321,
+                IsValid = true
             };
             var count = 1000000;
             for (int i = 0; i < count; i++)

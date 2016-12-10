@@ -32,3 +32,4 @@ D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\SharpDX.Direct3D9.xml
 D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.exe
 D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.pdb
+D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Graviton.DX.exe.config

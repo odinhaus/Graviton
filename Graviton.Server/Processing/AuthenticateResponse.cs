@@ -7,34 +7,40 @@ using System.Threading.Tasks;
 
 namespace Graviton.Server.Processing
 {
-    [StructLayout(LayoutKind.Sequential, Size = 1 + 8 + 1)]
     public class AuthenticateResponse : ICanSerialize
     {
-        public bool _IsAuthenticated;
-        public ulong _Requester;
-        public bool _IsValid;
-
-        public bool IsValid { get { return _IsValid; } set { _IsValid = value; } }
+        _AuthenticateResponse m = new _AuthenticateResponse();
+        public ulong Requester { get { return m._Requester; } set { m._Requester = value; } }
+        public bool IsAuthenticated { get { return m._IsAuthenticated; } set { m._IsAuthenticated = value; } }
+        public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
         public byte[] Serialize()
         {
-            int size = Marshal.SizeOf<AuthenticateResponse>();
+            int size = Marshal.SizeOf(typeof(_AuthenticateResponse));
             var bytes = new byte[size];
             IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(this, ptr, true);
+            Marshal.StructureToPtr(m, ptr, true);
             Marshal.Copy(ptr, bytes, 0, size);
             Marshal.FreeHGlobal(ptr);
             return bytes;
         }
 
-        public static AuthenticateResponse Deserialize(byte[] bytes, int offset = 0)
+        public void Deserialize(byte[] bytes, int offset = 0)
         {
-            var deserialized = new AuthenticateResponse();
-            int size = Marshal.SizeOf<AuthenticateResponse>();
+            var deserialized = new _AuthenticateResponse();
+            int size = Marshal.SizeOf(typeof(_AuthenticateResponse));
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.Copy(bytes, offset, ptr, size);
-            deserialized = (AuthenticateResponse)Marshal.PtrToStructure(ptr, typeof(AuthenticateResponse));
+            deserialized = (_AuthenticateResponse)Marshal.PtrToStructure(ptr, typeof(_AuthenticateResponse));
             Marshal.FreeHGlobal(ptr);
-            return deserialized;
+            m = deserialized;   
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public class _AuthenticateResponse
+    {
+        public bool _IsAuthenticated;
+        public ulong _Requester;
+        public bool _IsValid;
     }
 }

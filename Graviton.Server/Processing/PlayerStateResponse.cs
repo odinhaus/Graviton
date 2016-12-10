@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace Graviton.Server.Processing
 {
-    public class GameStateResponse : ICanSerialize
+    public class PlayerStateResponse : ICanSerialize
     {
-        _GameStateResponse m = new _GameStateResponse();
+        _PlayerStateResponse m = new _PlayerStateResponse();
 
-        public float WorldSize { get { return m._WorldSize; } set { m._WorldSize = value; } }
-        public ulong Epoch { get { return m._Epoch; } set { m._Epoch = value; } }
-        public long TimespanTicks { get { return m._TimespanTicks; } set { m._TimespanTicks = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
 
         public byte[] Serialize()
         {
-            int size = Marshal.SizeOf(typeof(_GameStateResponse));
+            int size = Marshal.SizeOf(typeof(_PlayerStateResponse));
             var bytes = new byte[size];
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.StructureToPtr(m, ptr, true);
@@ -29,22 +26,19 @@ namespace Graviton.Server.Processing
 
         public void Deserialize(byte[] bytes, int offset = 0)
         {
-            var deserialized = new _GameStateResponse();
-            int size = Marshal.SizeOf(typeof(_GameStateResponse));
+            var deserialized = new _PlayerStateResponse();
+            int size = Marshal.SizeOf(typeof(_PlayerStateResponse));
             IntPtr ptr = Marshal.AllocHGlobal(size);
             Marshal.Copy(bytes, offset, ptr, size);
-            deserialized = (_GameStateResponse)Marshal.PtrToStructure(ptr, typeof(_GameStateResponse));
+            deserialized = (_PlayerStateResponse)Marshal.PtrToStructure(ptr, typeof(_PlayerStateResponse));
             Marshal.FreeHGlobal(ptr);
             m = deserialized;
         }
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public class _GameStateResponse
+    public class _PlayerStateResponse
     {
-        public float _WorldSize;
-        public ulong _Epoch;
-        public long _TimespanTicks;
         public bool _IsValid;
     }
 }

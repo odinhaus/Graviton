@@ -27,23 +27,23 @@ namespace Graviton.Server
         public static void ProcessUserInput(GameTime gameTime, PlayerRequest request)
         {
             Player player;
-            if (request._IsFirstRequest && !_players.ContainsKey(request._Requester))
+            if (request.IsFirstRequest && !_players.ContainsKey(request.Requester))
             {
                 player = CreateNewPlayer(gameTime, request);
             }
             else
             {
-                player = _players[request._Requester];
+                player = _players[request.Requester];
             }
 
-            ProcessKeyboardInput(gameTime, player, request._KeyStateMask);
+            ProcessKeyboardInput(gameTime, player, request.KeyStateMask);
             MovePlayer(gameTime, player, request);
         }
 
         private static void MovePlayer(GameTime gameTime, Player player, PlayerRequest request)
         {
-            player.Vx = request._Vector_X * _maxSpeed;
-            player.Vy = request._Vector_Y * _maxSpeed;
+            player.Vx = request.Vector_X * _maxSpeed;
+            player.Vy = request.Vector_Y * _maxSpeed;
             player.Update(gameTime);
 
             
@@ -88,10 +88,10 @@ namespace Graviton.Server
         {
             yield return new GameStateResponse()
             {
-                _Epoch = gameTime.Epoch,
-                _TimespanTicks = gameTime.TotalGameTime.Ticks,
-                _WorldSize = _worldSize,
-                _IsValid = true
+                Epoch = gameTime.Epoch,
+                TimespanTicks = gameTime.TotalGameTime.Ticks,
+                WorldSize = _worldSize,
+                IsValid = true
             };
 
             foreach(var item in _quadTree.FindAll(new RectangleF() { X = x, Y = y, Width = width, Height = height})

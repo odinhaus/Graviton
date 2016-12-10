@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/Gold.png</SourceFile>
+  <SourceFile>D:/Code/Altus/Graviton/Graviton.DX/Content/Gold.png</SourceFile>
   <SourceTime>2016-11-29T08:15:16.520316-06:00</SourceTime>
-  <DestFile>C:/Users/BillB/Documents/Visual Studio 2015/Projects/Genesis/Genesis.DX/Content/bin/Gold.xnb</DestFile>
-  <DestTime>2016-12-01T08:53:38.4809239-06:00</DestTime>
+  <DestFile>D:/Code/Altus/Graviton/Graviton.DX/Content/bin/Gold.xnb</DestFile>
+  <DestTime>2016-12-10T10:32:00.1584191-06:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

@@ -67,7 +67,7 @@ namespace Graviton.Server
             return bytes;
         }
 
-        public static Player Deserialize(byte[] bytes, int offset = 0)
+        public void Deserialize(byte[] bytes, int offset = 0)
         {
             var deserialized = new _Player();
             int size = Marshal.SizeOf<_Player>();
@@ -75,10 +75,7 @@ namespace Graviton.Server
             Marshal.Copy(bytes, offset, ptr, size);
             deserialized = (_Player)Marshal.PtrToStructure(ptr, typeof(_Player));
             Marshal.FreeHGlobal(ptr);
-            return new Player()
-            {
-                _p = deserialized
-            };
+             _p = deserialized;
         }
 
         

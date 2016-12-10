@@ -10,5 +10,6 @@ namespace Graviton.Server.Processing
     {
         bool IsValid { get; set; }
         byte[] Serialize();
+        void Deserialize(byte[] bytes, int offset = 0);
     }
 }

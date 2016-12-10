@@ -76,14 +76,22 @@ namespace Graviton.Server.Net
         {
             var state = ar.AsyncState as SocketState;
             var client = state.Socket;
-            var read = client.EndReceive(ar);
-
-            if (read > 0)
+            try
             {
-                ReadData(read, state);
-                client.BeginReceive(state.Buffer, state.Offset, SocketState.BUFFER_SIZE - state.Offset, SocketFlags.None, new AsyncCallback(Receive), state);
+                var read = client.EndReceive(ar);
+
+                if (read > 0)
+                {
+                    ReadData(read, state);
+                    client.BeginReceive(state.Buffer, state.Offset, SocketState.BUFFER_SIZE - state.Offset, SocketFlags.None, new AsyncCallback(Receive), state);
+                }
+                else
+                {
+                    client.Dispose();
+                    _clients.Remove(state);
+                }
             }
-            else
+            catch
             {
                 client.Dispose();
                 _clients.Remove(state);
@@ -100,15 +108,16 @@ namespace Graviton.Server.Net
                 var response = new AuthenticateResponse();
                 if (UserInputs.Authenticate(state.Buffer, out requester))
                 {
-                    response._IsAuthenticated = true;
-                    response._Requester = requester;
+                    response.IsAuthenticated = true;
+                    response.Requester = requester;
                     state.Requester = requester;
                 }
                 else
                 {
-                    response._IsAuthenticated = false;
+                    response.IsAuthenticated = false;
                 }
                 response.IsValid = true;
+                state.Socket.Send(ItemTypes.GetType(response).GetBytes());
                 state.Socket.Send(response.Serialize());
             }
             else if (UserInputs.Process(state, out offset))

@@ -28,9 +28,10 @@ namespace Graviton.Server.Processing
 
         public static bool Authenticate(byte[] raw, out ulong requester)
         {
-            var request = AuthenticateRequest.Deserialize(raw);
+            var request = new AuthenticateRequest();
+            request.Deserialize(raw);
             requester = 0;
-            if (request._IsValid)
+            if (request.IsValid)
             {
                 return Game.Authenticate(request, out requester);
             }
@@ -49,8 +50,9 @@ namespace Graviton.Server.Processing
             offset = 0;
             while (offset + _size <= length)
             {
-                var request = PlayerRequest.Deserialize(raw, offset);
-                if (request._IsValid)
+                var request = new PlayerRequest();
+                request.Deserialize(raw, offset);
+                if (request.IsValid)
                 {
                     request.SocketState = state;
                     offset += _size;
@@ -138,7 +140,7 @@ namespace Graviton.Server.Processing
         private static void SendUpdates(UpdateArg arg)
         {
             var requester = arg.Requests[arg.Index];
-            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester._Viewport_X, requester._Viewport_Y, requester._Viewport_W, requester._Viewport_H))
+            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester.ViewPort_X, requester.ViewPort_Y, requester.ViewPort_W, requester.ViewPort_H))
             {
                 arg.Requests[arg.Index].SocketState.Socket.Send(ItemTypes.GetType(item).GetBytes());
                 arg.Requests[arg.Index].SocketState.Socket.Send(item.Serialize());

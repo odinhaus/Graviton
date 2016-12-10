@@ -14,6 +14,7 @@ namespace Graviton.Server.Threading
         public WorkerPool(byte workerCount, Action<T> work)
         {
             _workers = new Worker<T>[workerCount];
+            _waitHandles = new WaitHandle[workerCount];
             for(int i = 0; i < workerCount; i++)
             {
                 _workers[i] = new Worker<T>(work);

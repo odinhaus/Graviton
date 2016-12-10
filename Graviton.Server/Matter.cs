@@ -65,7 +65,7 @@ namespace Graviton.Server
             return bytes;
         }
 
-        public static Matter Deserialize(byte[] bytes, int offset = 0)
+        public void Deserialize(byte[] bytes, int offset = 0)
         {
             var deserialized = new _Matter();
             int size = Marshal.SizeOf<_Matter>();
@@ -73,10 +73,7 @@ namespace Graviton.Server
             Marshal.Copy(bytes, offset, ptr, size);
             deserialized = (_Matter)Marshal.PtrToStructure(ptr, typeof(_Matter));
             Marshal.FreeHGlobal(ptr);
-            return new Matter()
-            {
-                m = deserialized
-            };
+            m = deserialized;
         }
 
     }
