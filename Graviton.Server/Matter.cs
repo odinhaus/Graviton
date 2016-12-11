@@ -35,6 +35,14 @@ namespace Graviton.Server
         public RectangleF WorldBounds { get; set; }
         public QuadTree<IMovable>.Quad Quad { get; set; }
 
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.Matter;
+            }
+        }
+
         public void Update(GameTime gameTime)
         {
             if (Vx != 0f || Vy != 0f)

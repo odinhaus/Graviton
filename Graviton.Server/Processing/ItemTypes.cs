@@ -7,43 +7,37 @@ using System.Threading.Tasks;
 
 namespace Graviton.Server.Processing
 {
-    public static class ItemTypes
+    public enum ItemTypeId : uint
     {
-        public static uint GetType(ICanSerialize item)
-        {
-            if (item is GameStateResponse)
-            {
-                return 1;
-            }
-            else if (item is PlayerStateResponse)
-            {
-                return 2;
-            }
-            else if (item is AuthenticateResponse)
-            {
-                return 3;
-            }
-            return 0;
-        }
-
-        public static ICanSerialize GetSerializer(uint type)
+        GameStateResponse = 1,
+        PlayerStateResponse,
+        AuthenticateResponse,
+        AuthenticateRequest,
+        PlayerStateRequest,
+        MatterStateResponse,
+        Matter,
+        Player
+    }
+    public static class ItemTypes
+    { 
+        public static ICanSerialize GetSerializer(ItemTypeId type)
         {
             switch(type)
             {
-                case 1: return new GameStateResponse();
-                case 2: return new PlayerStateResponse();
-                case 3: return new AuthenticateResponse();
+                case ItemTypeId.GameStateResponse: return new GameStateResponse();
+                case ItemTypeId.PlayerStateResponse: return new PlayerStateResponse();
+                case ItemTypeId.AuthenticateResponse: return new AuthenticateResponse();
                 default: return null;
             }
         }
 
-        internal static int GetLength(uint type)
+        internal static int GetLength(ItemTypeId type)
         {
             switch (type)
             {
-                case 1: return Marshal.SizeOf(typeof(GameStateResponse));
-                case 2: return Marshal.SizeOf(typeof(PlayerStateResponse));
-                case 3: return Marshal.SizeOf(typeof(AuthenticateResponse));
+                case ItemTypeId.GameStateResponse: return Marshal.SizeOf(typeof(_GameStateResponse));
+                case ItemTypeId.PlayerStateResponse: return Marshal.SizeOf(typeof(_PlayerStateResponse));
+                case ItemTypeId.AuthenticateResponse: return Marshal.SizeOf(typeof(_AuthenticateResponse));
                 default: return 0;
             }
         }

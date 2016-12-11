@@ -15,6 +15,13 @@ namespace Graviton.Server.Processing
         public ulong Epoch { get { return m._Epoch; } set { m._Epoch = value; } }
         public long TimespanTicks { get { return m._TimespanTicks; } set { m._TimespanTicks = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.GameStateResponse;
+            }
+        }
 
         public byte[] Serialize()
         {

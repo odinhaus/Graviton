@@ -8,6 +8,7 @@ using Graviton.Server.Processing;
 using System.Runtime.InteropServices;
 using Graviton.Server.Indexing;
 using Graviton.Server.Serialization;
+using Graviton.Server.Net;
 
 namespace Graviton.Server
 {
@@ -21,6 +22,13 @@ namespace Graviton.Server
             LastUpdate = gameTime.Epoch;
             FirstUpdate = gameTime.Epoch;
             WorldBounds = worldBounds;
+            ViewPort = new RectangleF()
+            {
+                X = -50f,
+                Y = -33f,
+                Width = 100f,
+                Height = 66f
+            };
         }
 
         public RectangleF Bounds { get { return _p._Bounds; } set { _p._Bounds = value; } }
@@ -33,15 +41,25 @@ namespace Graviton.Server
         public ulong Requester { get { return _p._Requester; } set { _p._Requester = value; } }
         public ulong FirstUpdate { get { return _p._FirstUpdate; } set { _p._FirstUpdate = value; } }
         public ulong LastUpdate { get { return _p._LastUpdate; } set { _p._LastUpdate = value; } }
+        public ulong LocalEpoch { get { return _p._LocalEpoch; } set { _p._LocalEpoch = value; } }
         public RectangleF WorldBounds { get; set; }
+        public RectangleF ViewPort { get; set; }
+        public SocketState SocketState { get; set; }
         public QuadTree<IMovable>.Quad Quad { get; set; }
 
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.Player;
+            }
+        }
 
         public void Update(GameTime gameTime)
         {
+            LastUpdate = gameTime.Epoch;
             if (Vx != 0f || Vy != 0f)
             {
-                LastUpdate = gameTime.Epoch;
                 var dx = Vx * (float)gameTime.EpochGameTime.TotalSeconds;
                 var dy = Vy * (float)gameTime.EpochGameTime.TotalSeconds;
                 X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
@@ -52,6 +70,13 @@ namespace Graviton.Server
                     Y = Bounds.Y + dy,
                     Width = Bounds.Width,
                     Height = Bounds.Height
+                };
+                ViewPort = new RectangleF()
+                {
+                    X = ViewPort.X + dx,
+                    Y = ViewPort.Y + dy,
+                    Width = ViewPort.Width,
+                    Height = ViewPort.Height
                 };
             }
         }
@@ -92,6 +117,7 @@ namespace Graviton.Server
         public ulong _Requester;
         public ulong _FirstUpdate;
         public ulong _LastUpdate;
+        public ulong _LocalEpoch;
         public uint _Mass;
         public bool _IsValid;
     }

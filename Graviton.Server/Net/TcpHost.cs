@@ -95,6 +95,7 @@ namespace Graviton.Server.Net
             {
                 client.Dispose();
                 _clients.Remove(state);
+                UserInputs.UserDisconnected(state.Requester);
             }
         }
 
@@ -106,7 +107,7 @@ namespace Graviton.Server.Net
             {
                 ulong requester;
                 var response = new AuthenticateResponse();
-                if (UserInputs.Authenticate(state.Buffer, out requester))
+                if (UserInputs.Authenticate(state, out requester))
                 {
                     response.IsAuthenticated = true;
                     response.Requester = requester;
@@ -117,7 +118,7 @@ namespace Graviton.Server.Net
                     response.IsAuthenticated = false;
                 }
                 response.IsValid = true;
-                state.Socket.Send(ItemTypes.GetType(response).GetBytes());
+                state.Socket.Send(response.Type.GetBytes());
                 state.Socket.Send(response.Serialize());
             }
             else if (UserInputs.Process(state, out offset))

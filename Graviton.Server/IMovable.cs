@@ -1,4 +1,5 @@
 ﻿using Graviton.Server.Drawing;
+using Graviton.Server.Indexing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace Graviton.Server
         float Vx { get; set; }
         float Vy { get; set; }
         RectangleF Bounds { get; }
+        QuadTree<IMovable>.Quad Quad { get; set; }
     }
 }

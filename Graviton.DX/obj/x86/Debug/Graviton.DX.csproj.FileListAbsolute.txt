@@ -7,6 +7,7 @@ D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Content\Gold.xnb
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Content\Indicator.xnb
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Content\Splitter.xnb
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Content\StarsCartoon.xnb
+D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Graviton.DX.exe.config
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Graviton.DX.exe
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Graviton.DX.pdb
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\MonoGame.Framework.dll
@@ -29,7 +30,5 @@ D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\SharpDX.Direct2D1.xml
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\SharpDX.XInput.xml
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\SharpDX.RawInput.xml
 D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\SharpDX.Direct3D9.xml
-D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.exe
 D:\Code\Altus\Graviton\Graviton.DX\obj\x86\Debug\Graviton.DX.pdb
-D:\Code\Altus\Graviton\Graviton.DX\bin\Windows\Debug\Graviton.DX.exe.config

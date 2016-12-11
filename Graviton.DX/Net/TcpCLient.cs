@@ -53,6 +53,7 @@ namespace Graviton.DX.Net
             {
                 try
                 {
+                    _socket.Bind(new IPEndPoint(new IPAddress(new byte[] { 127, 0, 0, 1 }), 0));
                     _socket.Connect((IPEndPoint)ipEndPoint);
 
                     var state = new SocketState()
@@ -80,6 +81,11 @@ namespace Graviton.DX.Net
             }
         }
 
+        public void Send(PlayerRequest update)
+        {
+            _socket.Send(update.Serialize());
+        }
+
 
         private void Receive(IAsyncResult ar)
         {
@@ -105,26 +111,29 @@ namespace Graviton.DX.Net
             var idx = 0;
             while(idx < state.Offset)
             {
-                if (state.Offset - idx > 4)
+                if (state.Offset - idx >= 2)
                 {
-                    var type = state.Buffer.ToUInt32();
-                    idx += 4;
-                    var length = ItemTypes.GetLength(type);
-                    if (state.Offset - idx > length)
+                    var type = state.Buffer.ToUInt16(idx);
+                    
+                    var length = ItemTypes.GetLength((ItemTypeId)type);
+                    if (state.Offset - idx >= length)
                     {
-                        var item = ItemTypes.GetSerializer(type);
-                        item.Deserialize(state.Buffer, idx);
-                        idx += length;
+                        var item = ItemTypes.GetSerializer((ItemTypeId)type);
+                        item.Deserialize(state.Buffer, idx + 2);
+                        idx += 2 + length; // only update the index if we read the whole thing
                         ProcessMessage(item);
                     }
+                    else break;
                 }
+                else break;
             }
 
             if (idx > 0)
             {
                 // copy residual buffer back to the state buffer
                 var buffer = new byte[SocketState.BUFFER_SIZE];
-                state.Buffer.Copy(SocketState.BUFFER_SIZE - idx, buffer, (uint)idx);
+                if (idx != state.Offset)
+                    state.Buffer.Copy(idx, buffer, (uint)state.Offset - (uint)idx);
                 state.Buffer = buffer;
                 state.Offset = state.Offset - idx;
             }

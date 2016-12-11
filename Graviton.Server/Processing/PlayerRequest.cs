@@ -17,6 +17,7 @@ namespace Graviton.Server.Processing
 
         public ulong Requester { get { return m._Requester; } set { m._Requester = value; } }
         public ulong KeyStateMask { get { return m._KeyStateMask; } set { m._KeyStateMask = value; } }
+        public ulong LocalEpoch { get { return m._LocalEpoch; } set { m._LocalEpoch = value; } }
         public float Vector_X { get { return m._Vector_X; } set { m._Vector_X = value; } }
         public float Vector_Y { get { return m._Vector_Y; } set { m._Vector_Y = value; } }
         public float ViewPort_X { get { return m._Viewport_X; } set { m._Viewport_X = value; } }
@@ -26,6 +27,14 @@ namespace Graviton.Server.Processing
         public bool IsFirstRequest { get { return m._IsFirstRequest; } set { m._IsFirstRequest = value; } }
 
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
+
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.PlayerStateRequest;
+            }
+        }
 
         public byte[] Serialize()
         {
@@ -55,6 +64,7 @@ namespace Graviton.Server.Processing
     {
         public ulong _Requester;
         public ulong _KeyStateMask;
+        public ulong _LocalEpoch;
         public float _Vector_X;
         public float _Vector_Y;
         public float _Viewport_X;

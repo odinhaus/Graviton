@@ -1,9 +1,9 @@
-D:\Code\Altus\Graviton\Graviton.Server.Tests\obj\Debug\Graviton.Server.Tests.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Graviton.Server.Tests.exe
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Graviton.Server.Tests.pdb
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Graviton.Server.exe
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Graviton.Server.pdb
 D:\Code\Altus\Graviton\Graviton.Server.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
+D:\Code\Altus\Graviton\Graviton.Server.Tests\obj\Debug\Graviton.Server.Tests.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.Server.Tests\obj\Debug\Graviton.Server.Tests.exe
 D:\Code\Altus\Graviton\Graviton.Server.Tests\obj\Debug\Graviton.Server.Tests.pdb

@@ -18,7 +18,7 @@ namespace Graviton.Server.Threading
             for(int i = 0; i < workerCount; i++)
             {
                 _workers[i] = new Worker<T>(work);
-                _waitHandles[i] = _workers[i].WaitHandle.WaitHandle;
+                _waitHandles[i] = _workers[i].ReadyHandle.WaitHandle;
             }
         }
 

@@ -27,16 +27,23 @@ namespace Graviton.Server.Processing
         {
             var sleep = _interval;
             double now = 0d, then = 0d;
-            while(_running)
+
+            var thread = new Thread(new ThreadStart(() =>
             {
-                Sleep(sleep);
-                now = Diagnostics.Timer.CurrentTime();
-                work();
-                then = Diagnostics.Timer.CurrentTime();
-                sleep = _interval - (then - now);
-                sleep.Clamp(0d, _interval);
-                Epoch++;
-            }
+                while (_running)
+                {
+                    Sleep(sleep);
+                    now = Diagnostics.Timer.CurrentTime();
+                    work();
+                    then = Diagnostics.Timer.CurrentTime();
+                    sleep = _interval - (then - now);
+                    sleep.Clamp(0d, _interval);
+                    Epoch++;
+                }
+            }));
+            thread.IsBackground = true;
+            thread.Name = "Scheduler Thread";
+            thread.Start();
         }
 
         public void Stop()

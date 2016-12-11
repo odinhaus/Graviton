@@ -15,6 +15,14 @@ namespace Graviton.Server.Processing
         public string Password { get { return m._Password; } set { m._Password = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
 
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.AuthenticateRequest;
+            }
+        }
+
         public byte[] Serialize()
         {
             int size = Marshal.SizeOf(typeof(_AuthenticateRequest));
@@ -38,12 +46,12 @@ namespace Graviton.Server.Processing
         }
     }
 
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Size = 32+32+1)]
     public class _AuthenticateRequest
     {
-        [MarshalAs(UnmanagedType.LPStr, SizeConst = 64)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string _Username;
-        [MarshalAs(UnmanagedType.LPStr, SizeConst = 64)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
         public string _Password;
         public bool _IsValid;
     }

@@ -15,27 +15,34 @@ namespace Graviton.Server.Processing
         static int _size = Marshal.SizeOf<PlayerRequest>();
         static Stopwatch _sw = new Stopwatch();
         static Scheduler _scheduler = new Scheduler(120);
-        static WorkerPool<UpdateArg> _responsePool;
-        static WorkerPool<UpdateArg> _inputPool;
+        static WorkerPool<UpdateArg<Player>> _responsePool;
+        static WorkerPool<UpdateArg<PlayerRequest>> _inputPool;
         static UserInputs()
         {
             _start = Diagnostics.Timer.CurrentTime();
             _sw.Start();
-            _responsePool = new WorkerPool<UpdateArg>(8, SendUpdates);
-            _inputPool = new WorkerPool<UpdateArg>(8, UpdateUserInput);
+            _responsePool = new WorkerPool<UpdateArg<Player>>(8, SendUpdates);
+            _inputPool = new WorkerPool<UpdateArg<PlayerRequest>>(8, UpdateUserInput);
+            GameTime = new GameTime(_sw.Elapsed, TimeSpan.FromMilliseconds(0), _scheduler.Epoch);
             _scheduler.Start(ProcessRequests);
         }
 
-        public static bool Authenticate(byte[] raw, out ulong requester)
+        public static bool Authenticate(SocketState state, out ulong requester)
         {
+            byte[] raw = state.Buffer;
             var request = new AuthenticateRequest();
             request.Deserialize(raw);
             requester = 0;
             if (request.IsValid)
             {
-                return Game.Authenticate(request, out requester);
+                return Game.Authenticate(request, state, out requester);
             }
             return false;
+        }
+
+        public static void UserDisconnected(ulong requester)
+        {
+            Game.UserDisconnected(requester);
         }
 
         public static bool Process(SocketState state, out int offset)
@@ -102,54 +109,62 @@ namespace Graviton.Server.Processing
                 requests = _requests.ToArray();
                 _requests.Clear();
             }
-            var gameTime = new GameTime(_sw.Elapsed, TimeSpan.FromMilliseconds(dt), _scheduler.Epoch);
+
+            GameTime = new GameTime(_sw.Elapsed, TimeSpan.FromMilliseconds(dt), _scheduler.Epoch);
 
             for (int i = 0; i < requests.Length; i++)
             {
-                var arg = new UpdateArg()
+                var arg = new UpdateArg<PlayerRequest>()
                 {
                     Requests = requests,
                     Index = i,
-                    GameTime = gameTime
+                    GameTime = GameTime
                 };
                 _inputPool.Execute(arg);
             }
-            _inputPool.WaitForCompletion();
 
-            Game.Update(gameTime);
+            if (requests.Length > 0)
+                _inputPool.WaitForCompletion();
 
-            for (int i = 0; i < requests.Length; i++)
+            Game.Update(GameTime);
+            var players = Game.Players;
+
+            for (int i = 0; i < players.Length; i++)
             {
-                var arg = new UpdateArg()
+                var arg = new UpdateArg<Player>()
                 {
-                    Requests = requests,
+                    Requests = players,
                     Index = i,
-                    GameTime = gameTime
+                    GameTime = GameTime
                 };
                 _responsePool.Execute(arg);
             }
-            _responsePool.WaitForCompletion();
+
+            if (players.Length > 0)
+                _responsePool.WaitForCompletion();
         }
 
-        private static void UpdateUserInput(UpdateArg arg)
+        public static GameTime GameTime { get; private set; }
+
+        private static void UpdateUserInput(UpdateArg<PlayerRequest> arg)
         {
             var requester = arg.Requests[arg.Index];
             Game.ProcessUserInput(arg.GameTime, requester);
         }
 
-        private static void SendUpdates(UpdateArg arg)
+        private static void SendUpdates(UpdateArg<Player> arg)
         {
             var requester = arg.Requests[arg.Index];
-            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester.ViewPort_X, requester.ViewPort_Y, requester.ViewPort_W, requester.ViewPort_H))
+            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester.ViewPort.X, requester.ViewPort.Y, requester.ViewPort.Width, requester.ViewPort.Height))
             {
-                arg.Requests[arg.Index].SocketState.Socket.Send(ItemTypes.GetType(item).GetBytes());
+                arg.Requests[arg.Index].SocketState.Socket.Send(item.Type.GetBytes());
                 arg.Requests[arg.Index].SocketState.Socket.Send(item.Serialize());
             }
         }
 
-        public class UpdateArg
+        public class UpdateArg<T>
         {
-            public PlayerRequest[] Requests;
+            public T[] Requests;
             public int Index;
             public GameTime GameTime;
         }

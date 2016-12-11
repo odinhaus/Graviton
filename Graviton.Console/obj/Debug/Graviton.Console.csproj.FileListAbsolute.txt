@@ -1,4 +1,3 @@
-D:\Code\Altus\Graviton\Graviton.Console\obj\Debug\Graviton.Console.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\Graviton.Console.exe.config
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\Graviton.Console.exe
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\Graviton.Console.pdb
@@ -18,5 +17,6 @@ D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\SharpDX.Direct2D1.xml
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\SharpDX.DXGI.xml
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\SharpDX.XInput.xml
 D:\Code\Altus\Graviton\Graviton.Console\bin\Debug\SharpDX.MediaFoundation.xml
+D:\Code\Altus\Graviton\Graviton.Console\obj\Debug\Graviton.Console.csprojResolveAssemblyReference.cache
 D:\Code\Altus\Graviton\Graviton.Console\obj\Debug\Graviton.Console.exe
 D:\Code\Altus\Graviton\Graviton.Console\obj\Debug\Graviton.Console.pdb

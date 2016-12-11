@@ -1,4 +1,5 @@
-﻿using Graviton.XNA.Primitives;
+﻿using Graviton.Common.Drawing;
+using Graviton.XNA.Primitives;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -13,7 +14,23 @@ namespace Graviton.XNA.Shapes.TwoD
     {
         private ColoredCirclePrimitive primitive;
 
-        public Vector3 Position { get; set; }
+        Vector3 _position;
+        public Vector3 Position
+        {
+            get { return _position; }
+            set
+            {
+                _position = value;
+                _boundingSphere.Center = value;
+                _boundingBox = new RectangleF()
+                {
+                    X = value.X - Radius / 2f,
+                    Y = value.Z - Radius / 2f,
+                    Width = Radius * 2f,
+                    Height = Radius * 2f
+                };
+            }
+        }
         public Vector3 Velocity { get; set; }
         public Color CenterColor = Color.White;
         public Color EdgeColor = Color.White;
@@ -25,6 +42,12 @@ namespace Graviton.XNA.Shapes.TwoD
         public BoundingSphere BoundingSphere
         {
             get { return _boundingSphere; }
+        }
+
+        private RectangleF _boundingBox;
+        public RectangleF BoundingBox
+        {
+            get { return _boundingBox; }
         }
 
         public Circle(GraphicsDevice graphics, float radius, int tellselation, Color centerColor, Color edgeColor)
@@ -43,6 +66,13 @@ namespace Graviton.XNA.Shapes.TwoD
             Graphics = graphics;
             Reference = primitive.vertices.ToArray();
             _boundingSphere = new BoundingSphere(Position, Radius);
+            _boundingBox = new RectangleF()
+            {
+                X = Position.X - Radius / 2f,
+                Y = Position.Y - Radius / 2f,
+                Width = Radius * 2f,
+                Height = Radius * 2f
+            };
         }
 
         ulong _frame = 0;
@@ -53,7 +83,7 @@ namespace Graviton.XNA.Shapes.TwoD
         {
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             _frame++;
-            _boundingSphere.Center = Position;
+            
 
             //var alpha = (_frame / 15d) / Math.PI;
             //var delta = 0.005 * Radius * Math.Sin(alpha);

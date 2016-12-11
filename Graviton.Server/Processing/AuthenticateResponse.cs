@@ -13,6 +13,13 @@ namespace Graviton.Server.Processing
         public ulong Requester { get { return m._Requester; } set { m._Requester = value; } }
         public bool IsAuthenticated { get { return m._IsAuthenticated; } set { m._IsAuthenticated = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.AuthenticateResponse;
+            }
+        }
         public byte[] Serialize()
         {
             int size = Marshal.SizeOf(typeof(_AuthenticateResponse));

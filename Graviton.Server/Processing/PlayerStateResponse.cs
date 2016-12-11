@@ -13,6 +13,22 @@ namespace Graviton.Server.Processing
 
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
 
+        public float X { get { return m._X; } set { m._X = value; } }
+        public float Y { get { return m._Y; } set { m._Y = value; } }
+        public uint Mass { get { return m._Mass; } set { m._Mass = value; } }
+        public float Vx { get { return m._Vx; } set { m._Vx = value; } }
+        public float Vy { get { return m._Vy; } set { m._Vy = value; } }
+        public ulong LastUpdate { get { return m._LastUpdate; } set { m._LastUpdate = value; } }
+        public ulong LocalEpoch { get { return m._LocalEpoch; } set { m._LocalEpoch = value; } }
+
+        public ushort Type
+        {
+            get
+            {
+                return (ushort)ItemTypeId.PlayerStateResponse;
+            }
+        }
+
         public byte[] Serialize()
         {
             int size = Marshal.SizeOf(typeof(_PlayerStateResponse));
@@ -39,6 +55,13 @@ namespace Graviton.Server.Processing
     [StructLayout(LayoutKind.Sequential)]
     public class _PlayerStateResponse
     {
+        public float _X;
+        public float _Y;
+        public uint _Mass;
+        public float _Vx;
+        public float _Vy;
+        public ulong _LastUpdate;
+        public ulong _LocalEpoch;
         public bool _IsValid;
     }
 }
