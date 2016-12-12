@@ -52,7 +52,7 @@ namespace Graviton.XNA.Players
             //edge = new Arc(graphics, Radius, 64, 0.15f, FillStyle.Center, 0f, (float)Math.PI * 2f, Color.White, 0.05f, Color.TransparentBlack, 0f, Color.TransparentBlack);
             face = new TexturedCircle(graphics, Radius * 1f, 48, texture);
             face.Rotation = Matrix.CreateRotationY(0f);
-            //edge.Position = new Vector3(0f, -0.2f, 0f);
+            edge.Position = new Vector3(0f, -0.2f, 0f);
             tracking = new Arc(graphics, Radius, 64, Radius / 12f, Primitives.FillStyle.Outside, (float)(5f * Math.PI / 4f), (float)(Math.PI / 2f), Color.HotPink, Radius / 12f, Color.Transparent, Radius / 12f, Color.Transparent);
             BoundingSphere = new BoundingSphere(_pos, Radius);
         }

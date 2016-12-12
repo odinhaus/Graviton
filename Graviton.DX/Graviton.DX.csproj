@@ -35,6 +35,7 @@
     <DefineConstants>TRACE;WINDOWS</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Icon.ico</ApplicationIcon>
@@ -114,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Background.jpg" />
+    <Content Include="Content\bg.png" />
     <Content Include="Content\Gold.png" />
     <Content Include="Content\Indicator.png" />
     <Content Include="Content\Splitter.png" />

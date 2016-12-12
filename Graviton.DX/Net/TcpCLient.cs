@@ -83,7 +83,8 @@ namespace Graviton.DX.Net
 
         public void Send(PlayerRequest update)
         {
-            _socket.Send(update.Serialize());
+            var bytes = update.Serialize();
+            _socket.Send(bytes);
         }
 
 
@@ -130,11 +131,12 @@ namespace Graviton.DX.Net
 
             if (idx > 0)
             {
-                // copy residual buffer back to the state buffer
-                var buffer = new byte[SocketState.BUFFER_SIZE];
                 if (idx != state.Offset)
-                    state.Buffer.Copy(idx, buffer, (uint)state.Offset - (uint)idx);
-                state.Buffer = buffer;
+                {
+                    // copy residual buffer back to the state buffer
+                    state.Buffer.Copy(idx, state.Swap, (uint)state.Offset - (uint)idx);
+                    state.Swap.Copy(0, state.Buffer, (uint)state.Offset - (uint)idx);
+                }
                 state.Offset = state.Offset - idx;
             }
         }

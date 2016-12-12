@@ -12,7 +12,7 @@ namespace Graviton.Server.Processing
 {
     public unsafe static class UserInputs
     {
-        static int _size = Marshal.SizeOf<PlayerRequest>();
+        static int _size = Marshal.SizeOf<_PlayerRequest>();
         static Stopwatch _sw = new Stopwatch();
         static Scheduler _scheduler = new Scheduler(120);
         static WorkerPool<UpdateArg<Player>> _responsePool;
@@ -89,20 +89,20 @@ namespace Graviton.Server.Processing
         static List<PlayerRequest> _requests = new List<PlayerRequest>();
 
         static double _start;
-        //static double _dt;
-        //static ulong _count = 0;
+        static double _dt;
+        static ulong _count = 0;
 
         private static void ProcessRequests()
         {
             var now = Diagnostics.Timer.CurrentTime();
             var dt = now - _start;
             _start = now;
-            //_dt = (_dt * (double)_count + dt) / ((double)_count + 1d);
-            //_count++;
-            //if (_count % 240 == 0)
-            //{
-            //    Console.WriteLine(dt + ", " + _dt);
-            //}
+            _dt = (_dt * (double)_count + dt) / ((double)_count + 1d);
+            _count++;
+            if (_count % 240 == 0)
+            {
+                Console.WriteLine(dt + ", " + _dt);
+            }
             PlayerRequest[] requests;
             lock(_requests)
             {

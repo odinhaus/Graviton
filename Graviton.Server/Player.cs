@@ -29,10 +29,12 @@ namespace Graviton.Server
                 Width = 100f,
                 Height = 66f
             };
+            MaxSpeed = 10f;
         }
 
         public RectangleF Bounds { get { return _p._Bounds; } set { _p._Bounds = value; } }
         public float Vx { get { return _p._Vx; } set { _p._Vx = value; } }
+        public float MaxSpeed { get { return _p._MaxSpeed; } set { _p._MaxSpeed = value; } }
         public float Vy { get { return _p._Vy; } set { _p._Vy = value; } }
         public float X { get { return _p._X; } set { _p._X = value; } }
         public float Y { get { return _p._Y; } set { _p._Y = value; } }
@@ -114,6 +116,7 @@ namespace Graviton.Server
         public float _Vy;
         public float _X;
         public float _Y;
+        public float _MaxSpeed;
         public ulong _Requester;
         public ulong _FirstUpdate;
         public ulong _LastUpdate;

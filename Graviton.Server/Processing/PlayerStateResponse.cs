@@ -13,7 +13,10 @@ namespace Graviton.Server.Processing
 
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
 
+        public double T { get { return m._T; } set { m._T = value; } }
+        public double dT { get { return m._dT; } set { m._dT = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
+        public float MaxSpeed { get { return m._MaxSpeed; } set { m._MaxSpeed = value; } }
         public float Y { get { return m._Y; } set { m._Y = value; } }
         public uint Mass { get { return m._Mass; } set { m._Mass = value; } }
         public float Vx { get { return m._Vx; } set { m._Vx = value; } }
@@ -55,8 +58,11 @@ namespace Graviton.Server.Processing
     [StructLayout(LayoutKind.Sequential)]
     public class _PlayerStateResponse
     {
+        public double _T;
+        public double _dT;
         public float _X;
         public float _Y;
+        public float _MaxSpeed;
         public uint _Mass;
         public float _Vx;
         public float _Vy;

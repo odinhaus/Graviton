@@ -63,7 +63,7 @@ namespace Graviton.XNA
 
         List<Splitter> _splitters = new List<Splitter>();
 
-        const float worldSize = 20000f;
+        const float worldSize = 10000f;
 
 
         public Game1()
@@ -151,7 +151,7 @@ namespace Graviton.XNA
             _gold = Content.Load<Texture2D>("Gold");
             Matter.Initialize(GraphicsDevice, _gold);
 
-            for (int p = 0; p < 100000; p++)
+            for (int p = 0; p < 10000; p++)
             {
                 var gold = new Matter(
                     new Vector3(RandomFloat(random, -worldSize, worldSize), 0f, RandomFloat(random, -worldSize, worldSize)),

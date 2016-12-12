@@ -3,7 +3,7 @@
   <SourceFile>D:/Code/Altus/Graviton/Graviton.DX/Content/BloomExtract.fx</SourceFile>
   <SourceTime>2015-08-03T06:00:46.8262881-05:00</SourceTime>
   <DestFile>D:/Code/Altus/Graviton/Graviton.DX/Content/bin/BloomExtract.xnb</DestFile>
-  <DestTime>2016-12-10T10:31:59.8914613-06:00</DestTime>
+  <DestTime>2016-12-11T22:03:08.4591008-06:00</DestTime>
   <Importer>EffectImporter</Importer>
   <ImporterTime>2015-04-29T12:14:44-05:00</ImporterTime>
   <Processor>EffectProcessor</Processor>

@@ -81,7 +81,7 @@
 /processorParam:TextureFormat=Color
 /build:Gold.png
 
-#begin Background.jpg
+#begin bg.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -90,5 +90,5 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:TextureFormat=Color
-/build:Background.jpg
+/build:bg.png
 

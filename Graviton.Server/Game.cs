@@ -130,6 +130,8 @@ namespace Graviton.Server
                     var p = (Player)item;
                     yield return new PlayerStateResponse()
                     {
+                        T = gameTime.TotalGameTime.TotalSeconds,
+                        dT = gameTime.EpochGameTime.TotalSeconds,
                         X = p.X,
                         Y = p.Y,
                         Mass = p.Mass,
@@ -137,7 +139,8 @@ namespace Graviton.Server
                         Vy = p.Vy,
                         LastUpdate = p.LastUpdate,
                         IsValid = true,
-                        LocalEpoch = p.LocalEpoch
+                        LocalEpoch = p.LocalEpoch,
+                        MaxSpeed = p.MaxSpeed
                     };
                 }
             }

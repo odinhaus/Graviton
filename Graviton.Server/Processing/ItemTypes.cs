@@ -19,14 +19,21 @@ namespace Graviton.Server.Processing
         Player
     }
     public static class ItemTypes
-    { 
+    {
+        private static GameStateResponse _gsr = new GameStateResponse();
+        private static PlayerStateResponse _psr = new PlayerStateResponse();
+        private static AuthenticateResponse _ar = new AuthenticateResponse();
+        private static int _gsrL = Marshal.SizeOf(typeof(_GameStateResponse));
+        private static int _psrL = Marshal.SizeOf(typeof(_PlayerStateResponse));
+        private static int _arL = Marshal.SizeOf(typeof(_AuthenticateResponse));
+
         public static ICanSerialize GetSerializer(ItemTypeId type)
         {
             switch(type)
             {
-                case ItemTypeId.GameStateResponse: return new GameStateResponse();
-                case ItemTypeId.PlayerStateResponse: return new PlayerStateResponse();
-                case ItemTypeId.AuthenticateResponse: return new AuthenticateResponse();
+                case ItemTypeId.GameStateResponse: return _gsr;
+                case ItemTypeId.PlayerStateResponse: return _psr;
+                case ItemTypeId.AuthenticateResponse: return _ar;
                 default: return null;
             }
         }
@@ -35,9 +42,9 @@ namespace Graviton.Server.Processing
         {
             switch (type)
             {
-                case ItemTypeId.GameStateResponse: return Marshal.SizeOf(typeof(_GameStateResponse));
-                case ItemTypeId.PlayerStateResponse: return Marshal.SizeOf(typeof(_PlayerStateResponse));
-                case ItemTypeId.AuthenticateResponse: return Marshal.SizeOf(typeof(_AuthenticateResponse));
+                case ItemTypeId.GameStateResponse: return _gsrL;
+                case ItemTypeId.PlayerStateResponse: return _psrL;
+                case ItemTypeId.AuthenticateResponse: return _arL;
                 default: return 0;
             }
         }

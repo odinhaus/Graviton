@@ -21,6 +21,7 @@ namespace Graviton.Server.Net
         }
 
         public const int BUFFER_SIZE = 1024 * 1;
+        public byte[] Swap = new byte[BUFFER_SIZE];
         public byte[] Buffer = new byte[BUFFER_SIZE];
         public Socket Socket;
         public ulong Id;

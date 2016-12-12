@@ -120,15 +120,15 @@ namespace Graviton.Server.Net
                 response.IsValid = true;
                 state.Socket.Send(response.Type.GetBytes());
                 state.Socket.Send(response.Serialize());
+                state.Offset = 0;
             }
             else if (UserInputs.Process(state, out offset))
             {
-                var buffer = new byte[SocketState.BUFFER_SIZE];
                 if (offset > 0)
                 {
-                    state.Buffer.Copy(SocketState.BUFFER_SIZE - offset, buffer, (uint)offset);
+                    state.Buffer.Copy(SocketState.BUFFER_SIZE - offset, state.Swap, (uint)offset);
+                    state.Swap.Copy(0, state.Buffer, (uint)offset);
                 }
-                state.Buffer = buffer;
                 state.Offset = offset;
             }
         }

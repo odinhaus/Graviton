@@ -49,8 +49,8 @@ namespace Graviton.XNA.Diagnostics
 
             string fps = string.Format("fps: {0} mem : {1} upd: {2} frm: {3}", frameRate, mem, uc, fc);
             spriteBatch.Begin();
-            spriteBatch.DrawString(spriteFont, fps, new Vector2(1, 1), Color.Black);
-            spriteBatch.DrawString(spriteFont, fps, new Vector2(0, 0), Color.White);
+            spriteBatch.DrawString(spriteFont, fps, new Vector2(3, 3), Color.Black);
+            spriteBatch.DrawString(spriteFont, fps, new Vector2(2, 2), Color.White);
             spriteBatch.End();
         }
     }
