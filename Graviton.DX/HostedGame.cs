@@ -84,25 +84,26 @@ namespace Graviton.DX
         private void UpdatePlayerState(PlayerStateResponse r)
         {
             var gameTime = new GameTime(TimeSpan.FromSeconds(r.T), TimeSpan.FromSeconds(r.dT));
+            if (r.Requestor == Requester)
+            {
+                _disc.Velocity = new Vector3(r.Vx, 0, r.Vy);
+                _disc.Update(gameTime);
 
-            _disc.Velocity = new Vector3(r.Vx, 0, r.Vy);
-            _disc.Update(gameTime);
+                if (_disc.Position.X > _gameCamera.Position.X)
+                    _gameCamera.PanRight(_disc.Position.X - _gameCamera.Position.X);
+                else
+                    _gameCamera.PanLeft(_gameCamera.Position.X - _disc.Position.X);
 
-            if (_disc.Position.X > _gameCamera.Position.X)
-                _gameCamera.PanRight(_disc.Position.X - _gameCamera.Position.X);
-            else
-                _gameCamera.PanLeft(_gameCamera.Position.X - _disc.Position.X);
+                if (_disc.Position.Z > _gameCamera.Position.Z)
+                    _gameCamera.PanDown(_disc.Position.Z - _gameCamera.Position.Z);
+                else
+                    _gameCamera.PanUp(_gameCamera.Position.Z - _disc.Position.Z);
 
-            if (_disc.Position.Z > _gameCamera.Position.Z)
-                _gameCamera.PanDown(_disc.Position.Z - _gameCamera.Position.Z);
-            else
-                _gameCamera.PanUp(_gameCamera.Position.Z - _disc.Position.Z);
+                _gameCamera.Update(gameTime);
 
-            _gameCamera.Update(gameTime);
-
-            ViewPort.X = ViewPort.X + (float)(r.Vx * r.dT);
-            ViewPort.Y = ViewPort.Y + (float)(r.Vy * r.dT);
-
+                ViewPort.X = ViewPort.X + (float)(r.Vx * r.dT);
+                ViewPort.Y = ViewPort.Y + (float)(r.Vy * r.dT);
+            }
             IsReady = true;
         }
 

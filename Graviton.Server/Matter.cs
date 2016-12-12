@@ -10,7 +10,14 @@ using Graviton.Server.Indexing;
 
 namespace Graviton.Server
 {
-    [StructLayout(LayoutKind.Sequential)]
+    public enum MatterType
+    {
+        Gold,
+        Silicate,
+        HydroCarbon,
+        Water,
+        Gas
+    }
     public class Matter : IMovable
     {
         _Matter m = new _Matter();
@@ -24,10 +31,12 @@ namespace Graviton.Server
         }
 
         public RectangleF Bounds { get { return m._Bounds; } set { m._Bounds = value; } }
+        public MatterType MatterType { get { return m._Type; } set { m._Type = value; } }
         public float Vx { get { return m._Vx; } set { m._Vx = value; } }
         public float Vy { get { return m._Vy; } set { m._Vy = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
         public float Y { get { return m._Y; } set { m._Y = value; } }
+        public uint Mass { get { return m._Mass; } set { m._Mass = value; } }
         public ulong FirstUpdate { get { return m._FirstUpdate; } set { m._FirstUpdate = value; } }
         public ulong LastUpdate { get { return m._LastUpdate; } set { m._LastUpdate = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
@@ -90,10 +99,12 @@ namespace Graviton.Server
     public class _Matter
     {
         public RectangleF _Bounds;
+        public MatterType _Type;
         public float _Vx;
         public float _Vy;
         public float _X;
         public float _Y;
+        public uint _Mass;
         public ulong _FirstUpdate;
         public ulong _LastUpdate;
         public bool _IsValid;

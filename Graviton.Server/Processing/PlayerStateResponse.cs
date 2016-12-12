@@ -13,6 +13,7 @@ namespace Graviton.Server.Processing
 
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
 
+        public ulong Requestor { get { return m._Requestor; } set { m._Requestor = value; } }
         public double T { get { return m._T; } set { m._T = value; } }
         public double dT { get { return m._dT; } set { m._dT = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
@@ -58,6 +59,7 @@ namespace Graviton.Server.Processing
     [StructLayout(LayoutKind.Sequential)]
     public class _PlayerStateResponse
     {
+        public ulong _Requestor;
         public double _T;
         public double _dT;
         public float _X;

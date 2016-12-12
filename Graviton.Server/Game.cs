@@ -19,6 +19,40 @@ namespace Graviton.Server
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
+        static int _matterCount = 2000;
+
+
+        static Game()
+        {
+            Initialize();
+        }
+
+        private static void Initialize()
+        {
+            var r = new Random();
+            for (int i = 0; i < _matterCount; i++)
+            {
+                var matter = new Matter(UserInputs.GameTime, _worldBounds);
+                matter.MatterType = MatterType.Gold;
+                matter.X = RandomFloat(r, -_worldSize, _worldSize);
+                matter.Y = RandomFloat(r, -_worldSize, _worldSize);
+                matter.Vx = 0;
+                matter.Vy = 0;
+                matter.LastUpdate = UserInputs.GameTime.Epoch;
+                matter.Mass = (uint)r.Next(10, 50);
+                var width = matter.Mass / 10;
+                matter.Bounds = new RectangleF()
+                {
+                    X = matter.X - width / 2,
+                    Y = matter.Y - width / 2,
+                    Width = width,
+                    Height = width
+                };
+                matter.Quad = _quadTree.FindFirst(matter.Bounds);
+                matter.Quad.Items.Add(matter);
+            }
+        }
+
         public static bool Authenticate(AuthenticateRequest request, SocketState state, out ulong requester)
         {
             _requester++;
@@ -130,6 +164,7 @@ namespace Graviton.Server
                     var p = (Player)item;
                     yield return new PlayerStateResponse()
                     {
+                        Requestor = p.Requester,
                         T = gameTime.TotalGameTime.TotalSeconds,
                         dT = gameTime.EpochGameTime.TotalSeconds,
                         X = p.X,
@@ -143,7 +178,16 @@ namespace Graviton.Server
                         MaxSpeed = p.MaxSpeed
                     };
                 }
+                else if (item is Matter)
+                {
+
+                }
             }
+        }
+
+        private static float RandomFloat(Random random, float min, float max)
+        {
+            return (float)random.NextDouble() * (max - min) + min;
         }
     }
 }
