@@ -54,7 +54,7 @@ namespace Graviton.DX
 
         protected override void Initialize()
         {
-            this.TargetElapsedTime = TimeSpan.FromTicks((long)10000000 / (long)120);
+            this.TargetElapsedTime = TimeSpan.FromTicks((long)10000000 / (long)60);
 
             var form = (System.Windows.Forms.Form)System.Windows.Forms.Form.FromHandle(Window.Handle);
             form.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -190,7 +190,7 @@ namespace Graviton.DX
             {
                 _worldSize = r.WorldSize;
                 _gameCamera = new Camera(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 0.01f, _worldSize * 8);
-                _gameCamera.ZoomOut(235);
+                _gameCamera.ZoomOut(65);
                 _gameCamera.Range.Position.Max = new Vector3(_worldSize, _worldSize * 2f, _worldSize);
                 _gameCamera.Range.Position.Min = new Vector3(0, 10, 0);
             }
@@ -350,13 +350,13 @@ namespace Graviton.DX
 
             if (IsReady)
             {
-                lock (_index)
-                {
+                //lock (_index)
+                //{
                     foreach (var item in _index.FindAll(ViewPort).SelectMany(q => q.Items).ToArray())
                     {
                         item.Draw(_gameCamera.View, _gameCamera.Projection);
                     }
-                }
+                //}
                 _disc.Draw(_gameCamera.View, _gameCamera.Projection);
             }
             base.Draw(gameTime);
@@ -376,7 +376,7 @@ namespace Graviton.DX
 
             var tlX = ratio * (corners[4].X - corners[0].X) + corners[0].X;
             var tlZ = ratio * (corners[5].Z - corners[1].Z) + corners[1].Z;
-            var w = ratio * (corners[5].X - corners[1].X) - tlX;
+            var w = ratio * (corners[5].X - corners[1].X) + corners[1].X - tlX;
             var h = ratio * (corners[7].Z - corners[3].Z) + corners[3].Z - tlZ;
 
             return new RectangleF()

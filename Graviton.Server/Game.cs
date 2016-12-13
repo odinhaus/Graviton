@@ -19,7 +19,7 @@ namespace Graviton.Server
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
-        static int _matterCount = 50000;
+        static int _matterCount = 150000;
 
 
         static Game()
