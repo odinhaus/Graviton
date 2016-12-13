@@ -4,6 +4,7 @@ using Graviton.Server.Processing;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -16,12 +17,14 @@ namespace Graviton.DX.Net
     public delegate void AuthenticatedHandler(object sender, AuthenticateResponse response);
     public delegate void GameStateHandler(object sender, GameStateResponse response);
     public delegate void PlayerStateHandler(object sender, PlayerStateResponse response);
+    public delegate void MatterStateHandler(object sender, MatterStateResponse response);
 
     public class TcpClient : IDisposable
     {
         public event AuthenticatedHandler Authenticated;
         public event GameStateHandler GameStateUpdated;
         public event PlayerStateHandler PlayerStateUpdated;
+        public event MatterStateHandler MatterStateUpdated;
         public event ConnectedHandler Connected;
 
         Socket _socket;
@@ -155,6 +158,10 @@ namespace Graviton.DX.Net
             else if (item is PlayerStateResponse)
             {
                 PlayerStateUpdated?.Invoke(this, (PlayerStateResponse)item);
+            }
+            else if (item is MatterStateResponse)
+            {
+                MatterStateUpdated?.Invoke(this, (MatterStateResponse)item);
             }
         }
 

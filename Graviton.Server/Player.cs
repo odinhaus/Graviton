@@ -32,6 +32,7 @@ namespace Graviton.Server
             MaxSpeed = 10f;
         }
 
+        public bool IsNew { get; set; }
         public RectangleF Bounds { get { return _p._Bounds; } set { _p._Bounds = value; } }
         public float Vx { get { return _p._Vx; } set { _p._Vx = value; } }
         public float MaxSpeed { get { return _p._MaxSpeed; } set { _p._MaxSpeed = value; } }
@@ -65,7 +66,7 @@ namespace Graviton.Server
                 var dx = Vx * (float)gameTime.EpochGameTime.TotalSeconds;
                 var dy = Vy * (float)gameTime.EpochGameTime.TotalSeconds;
                 X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
-                Y = (X + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
+                Y = (Y + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
                 Bounds = new RectangleF()
                 {
                     X = Bounds.X + dx,

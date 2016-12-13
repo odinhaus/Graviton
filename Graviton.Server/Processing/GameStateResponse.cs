@@ -11,6 +11,8 @@ namespace Graviton.Server.Processing
     {
         _GameStateResponse m = new _GameStateResponse();
 
+        public double T { get { return m._T; } set { m._T = value; } }
+        public double dT { get { return m._dT; } set { m._dT = value; } }
         public float WorldSize { get { return m._WorldSize; } set { m._WorldSize = value; } }
         public ulong Epoch { get { return m._Epoch; } set { m._Epoch = value; } }
         public long TimespanTicks { get { return m._TimespanTicks; } set { m._TimespanTicks = value; } }
@@ -50,6 +52,8 @@ namespace Graviton.Server.Processing
     public class _GameStateResponse
     {
         public float _WorldSize;
+        public double _T;
+        public double _dT;
         public ulong _Epoch;
         public long _TimespanTicks;
         public bool _IsValid;

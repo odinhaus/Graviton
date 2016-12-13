@@ -13,6 +13,10 @@ using Graviton.XNA;
 using Graviton.XNA.Shapes.TwoD;
 using Graviton.Common.Drawing;
 using Graviton.XNA.Players;
+using Graviton.DX.Players;
+using Graviton.XNA.Primitives;
+using Graviton.Common.Indexing;
+using System.Diagnostics;
 
 namespace Graviton.DX
 {
@@ -38,6 +42,9 @@ namespace Graviton.DX
         private SpriteFont _font;
         private Disc _disc;
         private Texture2D _bg;
+        private Texture2D _gold;
+        private QuadTree<IMovable3> _index;
+        private Dictionary<long, Matter> _matter = new Dictionary<long, Matter>();
 
         public HostedGame()
         {
@@ -71,6 +78,7 @@ namespace Graviton.DX
             _renderTarget2 = new RenderTarget2D(GraphicsDevice, _screenW, _screenH, false, _pp.BackBufferFormat, _pp.DepthStencilFormat, _pp.MultiSampleCount, RenderTargetUsage.DiscardContents);
 
             _bloom.Settings = BloomSettings.PresetSettings[1];
+            
 
             base.Initialize();
         }
@@ -83,11 +91,10 @@ namespace Graviton.DX
 
         private void UpdatePlayerState(PlayerStateResponse r)
         {
-            var gameTime = new GameTime(TimeSpan.FromSeconds(r.T), TimeSpan.FromSeconds(r.dT));
             if (r.Requestor == Requester)
             {
                 _disc.Velocity = new Vector3(r.Vx, 0, r.Vy);
-                _disc.Update(gameTime);
+                _disc.Update(GameTime);
 
                 if (_disc.Position.X > _gameCamera.Position.X)
                     _gameCamera.PanRight(_disc.Position.X - _gameCamera.Position.X);
@@ -99,18 +106,64 @@ namespace Graviton.DX
                 else
                     _gameCamera.PanUp(_gameCamera.Position.Z - _disc.Position.Z);
 
-                _gameCamera.Update(gameTime);
+                _gameCamera.Update(GameTime);
 
-                ViewPort.X = ViewPort.X + (float)(r.Vx * r.dT);
-                ViewPort.Y = ViewPort.Y + (float)(r.Vy * r.dT);
+                ViewPort.X = ViewPort.X + (float)(r.Vx * GameTime.ElapsedGameTime.TotalSeconds);
+                ViewPort.Y = ViewPort.Y + (float)(r.Vy * GameTime.ElapsedGameTime.TotalSeconds);
+
+                _player.Value = string.Format("X: {0}  Y: {1}", _disc.Position.X.ToString("g3"), _disc.Position.Z.ToString("g3"));
+                _viewPort.Value = string.Format("X: {0}  Y: {1}  W: {2}  H: {3}", ViewPort.X.ToString("g3"), ViewPort.Y.ToString("g3"), ViewPort.Width.ToString("g3"), ViewPort.Height.ToString("g3"));
             }
             IsReady = true;
         }
 
+        private void UpdateMatterState(MatterStateResponse r)
+        {
+            if (!_matter.ContainsKey(r.Id))
+            {
+                Texture2D texture = null;
+                switch (r.MatterType)
+                {
+                    case MatterType.Gold:
+                        {
+                            texture = _gold;
+                            break;
+                        }
+                }
+
+                var matter = new Matter(GraphicsDevice, new Vector3(r.X, -2f, r.Y), new Vector3(r.Vx, 0, r.Vy), r.Mass, Matrix.CreateRotationY(r.Angle), texture);
+                lock (_index)
+                {
+                    matter.Quad = _index.FindFirst(matter.BoundingBox);
+                    matter.Quad.Items.Add(matter);
+                }
+                matter.DrawTexture = true;
+                _matter.Add(r.Id, matter);
+            }
+            else
+            {
+                var matter = _matter[r.Id];
+                matter.Position = new Vector3(r.X, 0, r.Y);
+                matter.Velocity = new Vector3(r.Vx, 0, r.Vy);
+                if (!matter.Quad.Bounds.Intersects(matter.BoundingBox))
+                {
+                    lock (_index)
+                    {
+                        matter.Quad.Items.Remove(matter);
+                        matter.Quad.Items.Add(matter);
+                    }
+                }
+                matter.Update(GameTime);
+            }
+        }
+
+        private GameTime GameTime;
         private void UpdateGameState(GameStateResponse r)
         {
+            GameTime = new GameTime(TimeSpan.FromSeconds(r.T), TimeSpan.FromSeconds(r.dT));
             if (_worldSize == 0 && r.WorldSize > 0)
             {
+                _index = new QuadTree<IMovable3>(6, new RectangleF() { X = -r.WorldSize, Y = -r.WorldSize, Width = r.WorldSize * 2f, Height = r.WorldSize * 2f });
                 Random random = new Random();
                 _stars = new Circle[550];
                 for (int i = 0; i < _stars.Length; i++)
@@ -126,6 +179,10 @@ namespace Graviton.DX
                     //star.Position = new Vector3(10, -10, 10);
                     star.Velocity = Vector3.Zero;
                     _stars[i] = star;
+                    //lock (_index)
+                    //{
+                        //_index.FindFirst(star.BoundingBox).Items.Add(star);
+                    //}
                 }
             }
 
@@ -133,19 +190,22 @@ namespace Graviton.DX
             {
                 _worldSize = r.WorldSize;
                 _gameCamera = new Camera(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 0.01f, _worldSize * 8);
-                _gameCamera.ZoomOut(15);
+                _gameCamera.ZoomOut(235);
                 _gameCamera.Range.Position.Max = new Vector3(_worldSize, _worldSize * 2f, _worldSize);
                 _gameCamera.Range.Position.Min = new Vector3(0, 10, 0);
-                var frustrum = new BoundingFrustum(_gameCamera.View * _gameCamera.Projection);
-                var corners = frustrum.GetCorners();
-                this.ViewPort = GetViewRect(corners, frustrum.Near.D);
             }
+
+            var frustrum = new BoundingFrustum(_gameCamera.View * _gameCamera.Projection);
+            var corners = frustrum.GetCorners();
+            this.ViewPort = GetViewRect(corners, frustrum.Near.D);
 
             this.ServerEpoch = r.Epoch;
         }
 
         protected override void LoadContent()
         {
+            Label.ShowLabels = true;
+
             _font = Content.Load<SpriteFont>(@"Font");
             FrameRate fr = new FrameRate(this, _spriteBatch, _font);
             Components.Add(fr);
@@ -155,6 +215,18 @@ namespace Graviton.DX
             _disc.DrawTexture = true;
 
             _bg = Content.Load<Texture2D>("bg");
+            _gold = Content.Load<Texture2D>("Gold");
+
+            _player = new Label(this, _spriteBatch, _font);
+            _player.Caption = "Player:";
+            _player.Position = new Vector2(0, 20);
+
+            _viewPort = new Label(this, _spriteBatch, _font);
+            _viewPort.Caption = "Viewport:";
+            _viewPort.Position = new Vector2(0, 40);
+
+            Components.Add(_player);
+            Components.Add(_viewPort);
 
             _client = new TcpClient();
 
@@ -175,10 +247,16 @@ namespace Graviton.DX
             {
                 UpdatePlayerState(r);
             };
+            _client.MatterStateUpdated += (s, r) =>
+            {
+                UpdateMatterState(r);
+            };
             _client.Connect();
 
             base.LoadContent();
         }
+
+        
 
         private static float RandomFloat(Random random, float min, float max)
         {
@@ -194,6 +272,8 @@ namespace Graviton.DX
         public ulong Epoch;
         private bool IsReady;
         private RectangleF ViewPort;
+        private Label _player;
+        private Label _viewPort;
 
         protected override void UnloadContent()
         {
@@ -249,9 +329,6 @@ namespace Graviton.DX
 
 
                 _client.Send(playerUpdate);
-
-                //_gameCamera.Velocity = (new Vector3(movementVector.X, 0, movementVector.Y) * 10f);
-                //_gameCamera.Update(gameTime);
             }
 
             base.Update(gameTime);
@@ -269,28 +346,17 @@ namespace Graviton.DX
 
         protected override void Draw(GameTime gameTime)
         {
-            //GraphicsDevice.SetRenderTarget(_renderTarget1);
             GraphicsDevice.Clear(Color.TransparentBlack);
 
             if (IsReady)
             {
-                //_spriteBatch.Begin(SpriteSortMode.Immediate, null, SamplerState.LinearWrap, null, null);
-                //_spriteBatch.Draw(_bg, new Vector2(0,0), new Rectangle(0, 0, _bg.Width, _bg.Height), Color.White);
-                ////_spriteBatch.Draw(_bg, Vector2.Zero, new Rectangle(0, 0, _bg.Width, _bg.Height), Color.White, 0, Vector2.Zero, 1, SpriteEffects.None, 0);
-                //_spriteBatch.End();
-
-                //GraphicsDevice.SetRenderTarget(null);
-
-                //_spriteBatch.Begin(0, BlendState.AlphaBlend);
-                //_spriteBatch.Draw(_renderTarget1, new Rectangle(0, 0, _screenW, _screenH), Color.White);
-                //_spriteBatch.End();
-
-                for (int i = 0; i < _stars.Length; i++)
+                lock (_index)
                 {
-                    if (ViewPort.Intersects(_stars[i].BoundingBox))
-                        _stars[i].Draw(_gameCamera.View, _gameCamera.Projection);
+                    foreach (var item in _index.FindAll(ViewPort).SelectMany(q => q.Items).ToArray())
+                    {
+                        item.Draw(_gameCamera.View, _gameCamera.Projection);
+                    }
                 }
-
                 _disc.Draw(_gameCamera.View, _gameCamera.Projection);
             }
             base.Draw(gameTime);
@@ -308,22 +374,17 @@ namespace Graviton.DX
 
             var ratio = (corners[0].Y - planeDepth) / (corners[0].Y - corners[4].Y);
 
-            //var tl = new Vector3(ratio * (corners[4].X - corners[0].X) + corners[0].X, 0f, ratio * (corners[4].Z - corners[0].Z) + corners[0].Z);
-            //var tr = new Vector3(ratio * (corners[5].X - corners[1].X) + corners[1].X, 0f, );
-            //var br = new Vector3(ratio * (corners[6].X - corners[2].X) + corners[2].X, 0f, ratio * (corners[6].Z - corners[2].Z) + corners[2].Z);
-            //var bl = new Vector3(ratio * (corners[7].X - corners[3].X) + corners[3].X, 0f, ratio * (corners[7].Z - corners[3].Z) + corners[3].Z);
-
-            var tlX = ratio * (corners[4].X - corners[0].X);
+            var tlX = ratio * (corners[4].X - corners[0].X) + corners[0].X;
             var tlZ = ratio * (corners[5].Z - corners[1].Z) + corners[1].Z;
             var w = ratio * (corners[5].X - corners[1].X) - tlX;
             var h = ratio * (corners[7].Z - corners[3].Z) + corners[3].Z - tlZ;
 
             return new RectangleF()
             {
-                X = tlX, //tl.X,
-                Y = tlZ, //tl.Z,
-                Width = w,//tr.X - tl.X,
-                Height = h,//bl.Z - tl.Z
+                X = tlX, 
+                Y = tlZ, 
+                Width = w,
+                Height = h,
             };
         }
     }

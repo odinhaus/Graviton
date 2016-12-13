@@ -12,14 +12,14 @@ namespace Graviton.Server
 {
     public static class Game
     {
-        static float _maxSpeed = 10f;
+        static float _maxSpeed = 100f;
         static float _worldSize = 10000f;
         static ulong _requester = 0;
         static RectangleF _worldBounds = new RectangleF() { X = -_worldSize, Y = -_worldSize, Height = _worldSize * 2f, Width = _worldSize * 2f };
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
-        static int _matterCount = 2000;
+        static int _matterCount = 50000;
 
 
         static Game()
@@ -38,8 +38,10 @@ namespace Graviton.Server
                 matter.Y = RandomFloat(r, -_worldSize, _worldSize);
                 matter.Vx = 0;
                 matter.Vy = 0;
+                matter.Angle = RandomFloat(r, 0, (float)Math.PI * 2f);
+                matter.FirstUpdate = UserInputs.GameTime.Epoch;
                 matter.LastUpdate = UserInputs.GameTime.Epoch;
-                matter.Mass = (uint)r.Next(10, 50);
+                matter.Mass = (uint)r.Next(10, 500);
                 var width = matter.Mass / 10;
                 matter.Bounds = new RectangleF()
                 {
@@ -50,6 +52,8 @@ namespace Graviton.Server
                 };
                 matter.Quad = _quadTree.FindFirst(matter.Bounds);
                 matter.Quad.Items.Add(matter);
+                matter.IsNew = true;
+                _updatables.Add(matter);
             }
         }
 
@@ -119,7 +123,10 @@ namespace Graviton.Server
                 Vy = 0,
                 Bounds = new RectangleF() { X = -0.5f, Y = -0.5f, Width = 1f, Height = 1f },
                 Mass = 10,
-                IsValid = true
+                IsValid = true,
+                FirstUpdate = gameTime.Epoch,
+                LastUpdate = gameTime.Epoch,
+                IsNew = true
             };
         }
 
@@ -128,21 +135,25 @@ namespace Graviton.Server
             for(int i = 0; i < _updatables.Count; i++)
             {
                 var updatable = _updatables[i];
-                updatable.Update(gameTime);
-
-
-                if (updatable.Quad != null && !updatable.Quad.Bounds.Intersects(updatable.Bounds))
+                if ( updatable.IsNew || ( updatable.Vx != 0f && updatable.Vy != 0f))
                 {
-                    updatable.Quad.Items.Remove(updatable);
-                    updatable.Quad = null;
-                }
+                    updatable.Update(gameTime);
 
-                if (updatable.Quad == null)
-                {
-                    var quad = _quadTree.FindFirst(updatable.Bounds);
-                    quad.Items.Add(updatable);
-                    updatable.Quad = quad;
+
+                    if (updatable.Quad != null && !updatable.Quad.Bounds.Intersects(updatable.Bounds))
+                    {
+                        updatable.Quad.Items.Remove(updatable);
+                        updatable.Quad = null;
+                    }
+
+                    if (updatable.Quad == null)
+                    {
+                        var quad = _quadTree.FindFirst(updatable.Bounds);
+                        quad.Items.Add(updatable);
+                        updatable.Quad = quad;
+                    }
                 }
+                updatable.IsNew = false;
             }
         }
 
@@ -151,13 +162,20 @@ namespace Graviton.Server
             yield return new GameStateResponse()
             {
                 Epoch = gameTime.Epoch,
+                T = gameTime.TotalGameTime.TotalSeconds,
+                dT = gameTime.EpochGameTime.TotalSeconds,
                 TimespanTicks = gameTime.TotalGameTime.Ticks,
                 WorldSize = _worldSize,
                 IsValid = true
             };
 
-            foreach(var item in _quadTree.FindAll(new RectangleF() { X = x, Y = y, Width = width, Height = height})
-                                         .SelectMany(q => q.Items).Where(m => m.LastUpdate == gameTime.Epoch))
+            IMovable[] items;
+            lock(_quadTree)
+            {
+                items = _quadTree.FindAll(new RectangleF() { X = x, Y = y, Width = width, Height = height }).SelectMany(q => q.Items).ToArray();
+            }
+
+            foreach(var item in items)
             {
                 if (item is Player)
                 {
@@ -165,8 +183,6 @@ namespace Graviton.Server
                     yield return new PlayerStateResponse()
                     {
                         Requestor = p.Requester,
-                        T = gameTime.TotalGameTime.TotalSeconds,
-                        dT = gameTime.EpochGameTime.TotalSeconds,
                         X = p.X,
                         Y = p.Y,
                         Mass = p.Mass,
@@ -180,7 +196,21 @@ namespace Graviton.Server
                 }
                 else if (item is Matter)
                 {
-
+                    var m = (Matter)item;
+                    yield return new MatterStateResponse()
+                    {
+                        Id = m.Id,
+                        Angle = m.Angle,
+                        FirstUpdate = m.FirstUpdate,
+                        LastUpdate = m.LastUpdate,
+                        Mass = m.Mass,
+                        MatterType = m.MatterType,
+                        Vx = m.Vx,
+                        Vy = m.Vy,
+                        X = m.X,
+                        Y = m.Y,
+                        IsValid = true
+                    };
                 }
             }
         }

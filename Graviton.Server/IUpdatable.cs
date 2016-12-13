@@ -9,6 +9,7 @@ namespace Graviton.Server
 {
     public interface IUpdatable : ICanSerialize
     {
+        bool IsNew { get; set; }
         ulong LastUpdate { get; }
         void Update(GameTime gameTime);
     }

@@ -59,6 +59,9 @@
     <Compile Include="..\Graviton.Server\Processing\ItemTypes.cs">
       <Link>Processing\ItemTypes.cs</Link>
     </Compile>
+    <Compile Include="..\Graviton.Server\Processing\MatterStateResponse.cs">
+      <Link>Processing\MatterStateResponse.cs</Link>
+    </Compile>
     <Compile Include="..\Graviton.Server\Processing\PlayerRequest.cs">
       <Link>Processing\PlayerRequest.cs</Link>
     </Compile>
@@ -85,6 +88,7 @@
     <Compile Include="Primitives\ColoredArc.cs" />
     <Compile Include="Primitives\ColoredCircle.cs" />
     <Compile Include="Primitives\GeometricPrimitive.cs" />
+    <Compile Include="Primitives\IDrawable.cs" />
     <Compile Include="Primitives\IMovable3.cs" />
     <Compile Include="Primitives\IPositionable3.cs" />
     <Compile Include="Primitives\LinePrimitive.cs" />

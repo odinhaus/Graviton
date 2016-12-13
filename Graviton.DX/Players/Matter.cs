@@ -13,26 +13,13 @@ namespace Graviton.DX.Players
 {
     public class Matter : IMovable3
     {
-        public static void Initialize(GraphicsDevice graphics, Texture2D texture)
-        {
-            Face = new TexturedCircle(graphics, 1f, 16, texture)
-            {
-                Position = Vector3.Zero,
-                Velocity = Vector3.Zero,
-                Scale = 1f,
-                Color = Color.Transparent
-            };
-        }
-
-
-        public static Texture2D Texture { get; private set; }
         public float Mass { get; private set; }
 
         public float Radius
         {
             get
             {
-                return 16f * (float)Math.Tanh(Mass / 50000f) + 1;
+                return 200f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
             }
         }
 
@@ -70,22 +57,36 @@ namespace Graviton.DX.Players
 
         public Matrix Rotation { get; private set; }
 
-        private static TexturedCircle Face;
-
-        public Matter(Vector3 position, Vector3 velocity, float mass, Matrix rotation)
+        private TexturedCircle Face
         {
+            get;
+            set;
+        }
+
+        public Matter(GraphicsDevice graphics, Vector3 position, Vector3 velocity, float mass, Matrix rotation, Texture2D texture)
+        {
+            Mass = mass;
+            Face = new TexturedCircle(graphics, Radius, 16, texture)
+            {
+                Position = position,
+                Velocity = velocity,
+                Scale = 1f,
+                Color = Color.Yellow
+            };
             Position = position;
             Velocity = velocity;
-            Mass = mass;
+           
             BoundingSphere = new BoundingSphere(Position, Radius);
             BoundingBox = new RectangleF() { X = Position.X - Radius, Y = Position.Z - Radius, Height = 2f * Radius, Width = 2f * Radius };
             Rotation = rotation;
+            Graphics = graphics;
+            
         }
 
         public void Update(GameTime gameTime)
         {
-            Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Position += dp;
+            //Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //Position += dp;
             _boundingSphere.Center = Position;
             _boundingBox.X = Position.X;
             _boundingBox.Y = Position.Z;
@@ -102,6 +103,7 @@ namespace Graviton.DX.Players
 
         public QuadTree<IMovable3>.Quad Quad;
         internal bool DrawTexture;
+        private GraphicsDevice Graphics;
 
         public void Dispose()
         {

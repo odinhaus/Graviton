@@ -7,32 +7,33 @@ using Graviton.Server.Drawing;
 using Graviton.Server.Processing;
 using System.Runtime.InteropServices;
 using Graviton.Server.Indexing;
+using System.Threading;
 
 namespace Graviton.Server
 {
-    public enum MatterType
-    {
-        Gold,
-        Silicate,
-        HydroCarbon,
-        Water,
-        Gas
-    }
     public class Matter : IMovable
     {
         _Matter m = new _Matter();
+        static long _id = 0;
 
-        public Matter() { }
-        public Matter(GameTime gameTime, RectangleF worldBounds)
+        public Matter()
+        {
+            Interlocked.Increment(ref _id);
+            this.Id = _id;
+        }
+        public Matter(GameTime gameTime, RectangleF worldBounds) : this()
         {
             LastUpdate = gameTime.Epoch;
             FirstUpdate = gameTime.Epoch;
             WorldBounds = worldBounds;
         }
 
+        public bool IsNew { get; set; }
+        public long Id { get { return m._Id; } set { m._Id = value; } }
         public RectangleF Bounds { get { return m._Bounds; } set { m._Bounds = value; } }
         public MatterType MatterType { get { return m._Type; } set { m._Type = value; } }
         public float Vx { get { return m._Vx; } set { m._Vx = value; } }
+        public float Angle { get { return m._Angle; } set { m._Angle = value; } }
         public float Vy { get { return m._Vy; } set { m._Vy = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
         public float Y { get { return m._Y; } set { m._Y = value; } }
@@ -100,6 +101,8 @@ namespace Graviton.Server
     {
         public RectangleF _Bounds;
         public MatterType _Type;
+        public long _Id;
+        public float _Angle;
         public float _Vx;
         public float _Vy;
         public float _X;

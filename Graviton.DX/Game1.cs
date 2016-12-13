@@ -149,15 +149,15 @@ namespace Graviton.XNA
             //}
             _background = Content.Load<Texture2D>("Background");
             _gold = Content.Load<Texture2D>("Gold");
-            Matter.Initialize(GraphicsDevice, _gold);
 
             for (int p = 0; p < 10000; p++)
             {
-                var gold = new Matter(
+                var gold = new Matter(GraphicsDevice,
                     new Vector3(RandomFloat(random, -worldSize, worldSize), 0f, RandomFloat(random, -worldSize, worldSize)),
                     new Vector3(RandomFloat(random, -10f, 10f), 0f, RandomFloat(random, -10f, 10f)),
                     RandomFloat(random, 1f, 1000f),
-                    Matrix.CreateRotationY(RandomFloat(random, 0f, (float)Math.PI * 2f)));//RandomFloat(random, 1f, 100f));
+                    Matrix.CreateRotationY(RandomFloat(random, 0f, (float)Math.PI * 2f)),
+                    _gold);//RandomFloat(random, 1f, 100f));
                 _matter.Add(gold);
                 gold.Quad = _index.FindFirst(gold.BoundingBox);
                 gold.Quad.Items.Add(gold);
