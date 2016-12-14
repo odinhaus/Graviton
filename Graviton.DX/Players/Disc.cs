@@ -20,7 +20,7 @@ namespace Graviton.XNA.Players
             {
                 Vector3 delta = value - _pos;
                 face.Position += delta;
-                edge.Position += delta;
+                //edge.Position += delta;
                 _pos = value;
             }
         }
@@ -32,13 +32,13 @@ namespace Graviton.XNA.Players
             set
             {
                 face.Velocity = value;
-                edge.Velocity = value;
+                //edge.Velocity = value;
                 _vel = value;
             }
         }
         
         TexturedCircle face;
-        Circle edge;
+        //Circle edge;
         //Arc edge;
         //Arc face;
         Arc tracking;
@@ -48,11 +48,11 @@ namespace Graviton.XNA.Players
         {
             Mass = mass;
 
-            edge = new Circle(graphics, Radius + 0.03f, 48, Color.White, new Color(255, 255, 255, 0));
+            //edge = new Circle(graphics, Radius + 0.03f, 48, Color.White, new Color(255, 255, 255, 0));
             //edge = new Arc(graphics, Radius, 64, 0.15f, FillStyle.Center, 0f, (float)Math.PI * 2f, Color.White, 0.05f, Color.TransparentBlack, 0f, Color.TransparentBlack);
             face = new TexturedCircle(graphics, Radius * 1f, 48, texture);
             face.Rotation = Matrix.CreateRotationY(0f);
-            edge.Position = new Vector3(0f, -0.2f, 0f);
+            //edge.Position = new Vector3(0f, -0.2f, 0f);
             tracking = new Arc(graphics, Radius, 64, Radius / 12f, Primitives.FillStyle.Outside, (float)(5f * Math.PI / 4f), (float)(Math.PI / 2f), Color.HotPink, Radius / 12f, Color.Transparent, Radius / 12f, Color.Transparent);
             BoundingSphere = new BoundingSphere(_pos, Radius);
         }
@@ -63,7 +63,7 @@ namespace Graviton.XNA.Players
         {
             get
             {
-                return 16f * (float)Math.Tanh(Mass / 50000f) + 1;
+                return 16f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
             }
         }
 
@@ -75,12 +75,12 @@ namespace Graviton.XNA.Players
             Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             _pos += dp;
             BoundingSphere = new BoundingSphere(_pos, Radius);
-            edge.Update(gameTime);
+            //edge.Update(gameTime);
             face.Update(gameTime);
 
             //Mass += (float)gameTime.ElapsedGameTime.TotalMilliseconds * 5f;
 
-            edge.Scale = Radius;
+            ///edge.Scale = Radius;
             face.Scale = Radius;
            
             if (IsTracking)
@@ -89,7 +89,7 @@ namespace Graviton.XNA.Players
 
         public void Draw(Matrix view, Matrix projection)
         {
-            edge.Draw(view, projection);
+            //edge.Draw(view, projection);
             if (DrawTexture)
                 face.Draw(view, projection);
             

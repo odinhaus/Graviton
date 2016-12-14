@@ -40,7 +40,7 @@ namespace Graviton.Server
         public float X { get { return _p._X; } set { _p._X = value; } }
         public float Y { get { return _p._Y; } set { _p._Y = value; } }
         public bool IsValid { get { return _p._IsValid; } set { _p._IsValid = value; } }
-        public uint Mass { get { return _p._Mass; } set { _p._Mass = value; } }
+        public float Mass { get { return _p._Mass; } set { _p._Mass = value; } }
         public ulong Requester { get { return _p._Requester; } set { _p._Requester = value; } }
         public ulong FirstUpdate { get { return _p._FirstUpdate; } set { _p._FirstUpdate = value; } }
         public ulong LastUpdate { get { return _p._LastUpdate; } set { _p._LastUpdate = value; } }
@@ -122,7 +122,7 @@ namespace Graviton.Server
         public ulong _FirstUpdate;
         public ulong _LastUpdate;
         public ulong _LocalEpoch;
-        public uint _Mass;
+        public float _Mass;
         public bool _IsValid;
     }
 }

@@ -19,7 +19,7 @@ namespace Graviton.DX.Players
         {
             get
             {
-                return 200f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
+                return 16f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
             }
         }
 

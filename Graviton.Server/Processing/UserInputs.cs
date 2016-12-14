@@ -155,7 +155,7 @@ namespace Graviton.Server.Processing
         private static void SendUpdates(UpdateArg<Player> arg)
         {
             var requester = arg.Requests[arg.Index];
-            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester.ViewPort.X, requester.ViewPort.Y, requester.ViewPort.Width, requester.ViewPort.Height))
+            foreach (var item in Game.GetUserUpdates(arg.GameTime, requester))
             {
                 arg.Requests[arg.Index].SocketState.Socket.Send(item.Type.GetBytes());
                 arg.Requests[arg.Index].SocketState.Socket.Send(item.Serialize());

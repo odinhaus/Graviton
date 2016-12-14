@@ -27,7 +27,7 @@ namespace Graviton.Server.Processing
         public float Vy { get { return m._Vy; } set { m._Vy = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
         public float Y { get { return m._Y; } set { m._Y = value; } }
-        public uint Mass { get { return m._Mass; } set { m._Mass = value; } }
+        public float Mass { get { return m._Mass; } set { m._Mass = value; } }
         public ulong FirstUpdate { get { return m._FirstUpdate; } set { m._FirstUpdate = value; } }
         public ulong LastUpdate { get { return m._LastUpdate; } set { m._LastUpdate = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
@@ -74,7 +74,7 @@ namespace Graviton.Server.Processing
         public float _Vy;
         public float _X;
         public float _Y;
-        public uint _Mass;
+        public float _Mass;
         public ulong _FirstUpdate;
         public ulong _LastUpdate;
         public bool _IsValid;

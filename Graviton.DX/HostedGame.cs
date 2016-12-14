@@ -94,6 +94,7 @@ namespace Graviton.DX
             if (r.Requestor == Requester)
             {
                 _disc.Velocity = new Vector3(r.Vx, 0, r.Vy);
+                _disc.Mass = r.Mass;
                 _disc.Update(GameTime);
 
                 if (_disc.Position.X > _gameCamera.Position.X)
@@ -179,10 +180,10 @@ namespace Graviton.DX
                     //star.Position = new Vector3(10, -10, 10);
                     star.Velocity = Vector3.Zero;
                     _stars[i] = star;
-                    //lock (_index)
-                    //{
-                        //_index.FindFirst(star.BoundingBox).Items.Add(star);
-                    //}
+                    lock (_index)
+                    {
+                        _index.FindFirst(star.BoundingBox).Items.Add(star);
+                    }
                 }
             }
 
@@ -190,9 +191,9 @@ namespace Graviton.DX
             {
                 _worldSize = r.WorldSize;
                 _gameCamera = new Camera(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 0.01f, _worldSize * 8);
-                _gameCamera.ZoomOut(65);
-                _gameCamera.Range.Position.Max = new Vector3(_worldSize, _worldSize * 2f, _worldSize);
-                _gameCamera.Range.Position.Min = new Vector3(0, 10, 0);
+                _gameCamera.ZoomOut(15);
+                _gameCamera.Range.Position.Max = new Vector3(_worldSize, _worldSize / 4f, _worldSize);
+                _gameCamera.Range.Position.Min = new Vector3(0, 2, 0);
             }
 
             var frustrum = new BoundingFrustum(_gameCamera.View * _gameCamera.Projection);
@@ -210,7 +211,7 @@ namespace Graviton.DX
             FrameRate fr = new FrameRate(this, _spriteBatch, _font);
             Components.Add(fr);
 
-            _disc = new Disc(this.GraphicsDevice, 10f, Content.Load<Texture2D>("StarsCartoon"));
+            _disc = new Disc(this.GraphicsDevice, 1000f, Content.Load<Texture2D>("StarsCartoon"));
             _disc.Position = Vector3.Zero;
             _disc.DrawTexture = true;
 
@@ -280,10 +281,6 @@ namespace Graviton.DX
             base.UnloadContent();
         }
 
-        
-        
-
-
         protected override void Update(GameTime gameTime)
         {
             Epoch++;
@@ -310,6 +307,8 @@ namespace Graviton.DX
 
                     _resizing = false;
                 }
+
+                UpdateMouseState(gameTime);
 
                 var playerUpdate = new PlayerRequest()
                 {
@@ -344,19 +343,45 @@ namespace Graviton.DX
             return new Vector2(vx, vy);
         }
 
+        private void UpdateMouseState(GameTime gameTime)
+        {
+            MouseState state = Mouse.GetState();
+            try
+            {
+                int wheel = state.ScrollWheelValue - _mouseState.ScrollWheelValue;
+                if (wheel != 0)
+                {
+                    if (wheel > 0)
+                    {
+                        // Zoom in 
+                        _gameCamera.ZoomIn(2f);
+                    }
+                    else
+                    {
+                        // Zoom out 
+                        _gameCamera.ZoomOut(2f);
+                    }
+                }
+            }
+            finally
+            {
+                _mouseState = state;
+            }
+        }
+
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
 
             if (IsReady)
             {
-                //lock (_index)
-                //{
+                lock (_index)
+                {
                     foreach (var item in _index.FindAll(ViewPort).SelectMany(q => q.Items).ToArray())
                     {
                         item.Draw(_gameCamera.View, _gameCamera.Projection);
                     }
-                //}
+                }
                 _disc.Draw(_gameCamera.View, _gameCamera.Projection);
             }
             base.Draw(gameTime);

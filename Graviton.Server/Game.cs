@@ -12,14 +12,14 @@ namespace Graviton.Server
 {
     public static class Game
     {
-        static float _maxSpeed = 100f;
-        static float _worldSize = 10000f;
+        static float _maxSpeed = 50f;
+        static float _worldSize = 13000f;
         static ulong _requester = 0;
         static RectangleF _worldBounds = new RectangleF() { X = -_worldSize, Y = -_worldSize, Height = _worldSize * 2f, Width = _worldSize * 2f };
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
-        static int _matterCount = 150000;
+        static int _matterCount = 1000;
 
 
         static Game()
@@ -41,8 +41,8 @@ namespace Graviton.Server
                 matter.Angle = RandomFloat(r, 0, (float)Math.PI * 2f);
                 matter.FirstUpdate = UserInputs.GameTime.Epoch;
                 matter.LastUpdate = UserInputs.GameTime.Epoch;
-                matter.Mass = (uint)r.Next(10, 500);
-                var width = matter.Mass / 10;
+                matter.Mass = (uint)r.Next(5000, 25000);
+                var width = 2f * (16f * (float)Math.Tanh(matter.Mass / 50000f) + 0.02f);
                 matter.Bounds = new RectangleF()
                 {
                     X = matter.X - width / 2,
@@ -66,6 +66,7 @@ namespace Graviton.Server
             player.Requester = requester;
             player.Quad = _quadTree.FindFirst(player.Bounds);
             player.Quad.Items.Add(player);
+            player.IsNew = true;
             _players.Add(requester, player);
             _updatables.Add(player);
             return true;
@@ -89,6 +90,19 @@ namespace Graviton.Server
             player.LocalEpoch = request.LocalEpoch;
             ProcessKeyboardInput(gameTime, player, request.KeyStateMask);
             MovePlayer(gameTime, player, request);
+            if (!float.IsNaN(request.ViewPort_H) &&
+                !float.IsNaN(request.ViewPort_X) &&
+                !float.IsNaN(request.ViewPort_Y) &&
+                !float.IsNaN(request.ViewPort_W))
+            { 
+                player.ViewPort = new RectangleF()
+                {
+                    X = player.X - request.ViewPort_W / 2f,
+                    Y = player.Y - request.ViewPort_H / 2f,
+                    Width = request.ViewPort_W,
+                    Height = request.ViewPort_H
+                };
+            }
         }
 
         public static void UserDisconnected(ulong requester)
@@ -122,7 +136,7 @@ namespace Graviton.Server
                 Vx = 0,
                 Vy = 0,
                 Bounds = new RectangleF() { X = -0.5f, Y = -0.5f, Width = 1f, Height = 1f },
-                Mass = 10,
+                Mass = 10000,
                 IsValid = true,
                 FirstUpdate = gameTime.Epoch,
                 LastUpdate = gameTime.Epoch,
@@ -153,11 +167,10 @@ namespace Graviton.Server
                         updatable.Quad = quad;
                     }
                 }
-                updatable.IsNew = false;
             }
         }
 
-        public static IEnumerable<ICanSerialize> GetUserUpdates(GameTime gameTime, float x, float y, float width, float height)
+        public static IEnumerable<ICanSerialize> GetUserUpdates(GameTime gameTime, Player requester)
         {
             yield return new GameStateResponse()
             {
@@ -172,7 +185,17 @@ namespace Graviton.Server
             IMovable[] items;
             lock(_quadTree)
             {
-                items = _quadTree.FindAll(new RectangleF() { X = x, Y = y, Width = width, Height = height }).SelectMany(q => q.Items).ToArray();
+                if (requester.IsNew)
+                {
+                    items = _updatables.ToArray();
+                }
+                else
+                {
+                    items = _quadTree.FindAll(new RectangleF() { X = requester.ViewPort.X, Y = requester.ViewPort.Y, Width = requester.ViewPort.Width, Height = requester.ViewPort.Height })
+                                     .SelectMany(q => q.Items)
+                                     .Where(i => i.LastUpdate == gameTime.Epoch)
+                                     .ToArray();
+                }
             }
 
             foreach(var item in items)
@@ -212,6 +235,7 @@ namespace Graviton.Server
                         IsValid = true
                     };
                 }
+                item.IsNew = false;
             }
         }
 
