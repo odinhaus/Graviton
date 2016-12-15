@@ -8,6 +8,8 @@ namespace Graviton.XNA.Primitives
 {
     public interface IDrawable
     {
+        void Load();
+        void Unload();
         void Draw(Matrix view, Matrix projection);
     }
 }

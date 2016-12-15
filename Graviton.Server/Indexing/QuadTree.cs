@@ -153,8 +153,10 @@ namespace Graviton.Server.Indexing
             public Quad()
             {
                 Items = new List<T>();
+                PlayerUpdates = new Dictionary<ulong, ulong>();
             }
 
+            public Dictionary<ulong, ulong> PlayerUpdates;
             public RectangleF Bounds;
             public Quad[,] Quads;
             public bool IsLeaf { get { return Quads == null; } }

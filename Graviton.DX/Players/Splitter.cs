@@ -50,6 +50,16 @@ namespace Graviton.DX.Players
             BoundingSphere = new BoundingSphere(_pos, Radius);
         }
 
+        public void Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unload()
+        {
+            throw new NotImplementedException();
+        }
+
         public float Radius { get; private set; }
         public bool IsTracking { get; set; }
         public BoundingSphere BoundingSphere { get; private set; }

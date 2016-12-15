@@ -53,11 +53,11 @@ namespace Graviton.XNA.Shapes.TwoD
         {
         }
 
-        public TexturedCircle(GraphicsDevice graphics, float radius, int tellselation, Texture2D texture, Effect customEffect)
+        public TexturedCircle(GraphicsDevice graphics, float radius, int tesellelation, Texture2D texture, Effect customEffect)
         {
-            primitive = new TexturedCirclePrimitive(graphics, radius * 2f, tellselation, texture);
-            Reference = primitive.vertices.ToArray();
-            primitive.CustomEffect = customEffect;
+            Tesellelation = tesellelation;
+
+            CustomEffect = customEffect;
             Graphics = graphics;
             Texture = texture;
             Radius = radius;
@@ -68,6 +68,20 @@ namespace Graviton.XNA.Shapes.TwoD
         private VertexPositionNormalTexture[] Reference;
         private Texture2D Texture;
         public Matrix Rotation;
+        private int Tesellelation;
+        private Effect CustomEffect;
+
+        public void Load()
+        {
+            primitive = new TexturedCirclePrimitive(Graphics, Radius * 2f, Tesellelation, Texture);
+            Reference = primitive.vertices.ToArray();
+            primitive.CustomEffect = CustomEffect;
+        }
+
+        public void Unload()
+        {
+            primitive.Dispose();
+        }
 
         public void Update(GameTime gameTime)
         {

@@ -13,13 +13,14 @@ namespace Graviton.Server
     public static class Game
     {
         static float _maxSpeed = 50f;
-        static float _worldSize = 13000f;
+        static float _worldSize = 500000f;
         static ulong _requester = 0;
         static RectangleF _worldBounds = new RectangleF() { X = -_worldSize, Y = -_worldSize, Height = _worldSize * 2f, Width = _worldSize * 2f };
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
-        static int _matterCount = 1000;
+        static List<IMovable> _moving = new List<IMovable>();
+        static int _matterCount = 500000;
 
 
         static Game()
@@ -54,6 +55,7 @@ namespace Graviton.Server
                 matter.Quad.Items.Add(matter);
                 matter.IsNew = true;
                 _updatables.Add(matter);
+                _moving.Add(matter);
             }
         }
 
@@ -69,6 +71,7 @@ namespace Graviton.Server
             player.IsNew = true;
             _players.Add(requester, player);
             _updatables.Add(player);
+            _moving.Add(player);
             return true;
         }
 
@@ -146,9 +149,9 @@ namespace Graviton.Server
 
         public static void Update(GameTime gameTime)
         {
-            for(int i = 0; i < _updatables.Count; i++)
+            for(int i = _moving.Count - 1; i >= 0 ; i--)
             {
-                var updatable = _updatables[i];
+                var updatable = _moving[i];
                 if ( updatable.IsNew || ( updatable.Vx != 0f && updatable.Vy != 0f))
                 {
                     updatable.Update(gameTime);
@@ -167,6 +170,14 @@ namespace Graviton.Server
                         updatable.Quad = quad;
                     }
                 }
+                else
+                {
+                    if (!(updatable is Player))
+                    {
+                        _moving.RemoveAt(i);
+                    }
+                }
+                updatable.IsNew = false;
             }
         }
 
@@ -182,19 +193,33 @@ namespace Graviton.Server
                 IsValid = true
             };
 
-            IMovable[] items;
+            List<IMovable> items = new List<IMovable>();
             lock(_quadTree)
             {
-                if (requester.IsNew)
+                //if (requester.IsNew)
+                //{
+                //    items = _updatables.ToArray();
+                //}
+                //else
+                //{
+                //    items = _quadTree.FindAll(new RectangleF() { X = requester.ViewPort.X, Y = requester.ViewPort.Y, Width = requester.ViewPort.Width, Height = requester.ViewPort.Height })
+                //                     .SelectMany(q => q.Items)
+                //                     .Where(i => i.LastUpdate == gameTime.Epoch)
+                //                     .ToArray();
+                //}
+                foreach(var quad in _quadTree.FindAll(new RectangleF() { X = requester.ViewPort.X, Y = requester.ViewPort.Y, Width = requester.ViewPort.Width, Height = requester.ViewPort.Height }))
                 {
-                    items = _updatables.ToArray();
-                }
-                else
-                {
-                    items = _quadTree.FindAll(new RectangleF() { X = requester.ViewPort.X, Y = requester.ViewPort.Y, Width = requester.ViewPort.Width, Height = requester.ViewPort.Height })
-                                     .SelectMany(q => q.Items)
-                                     .Where(i => i.LastUpdate == gameTime.Epoch)
-                                     .ToArray();
+                    ulong epoch = 0;
+                    if (quad.PlayerUpdates.ContainsKey(requester.Requester))
+                    {
+                        epoch = quad.PlayerUpdates[requester.Requester];
+                        quad.PlayerUpdates[requester.Requester] = gameTime.Epoch;
+                    }
+                    else
+                    {
+                        quad.PlayerUpdates.Add(requester.Requester, gameTime.Epoch);
+                    }
+                    items.AddRange(quad.Items.Where(i => i.LastUpdate >= epoch));
                 }
             }
 

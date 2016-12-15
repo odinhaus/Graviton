@@ -79,6 +79,16 @@ namespace Graviton.XNA.Shapes.TwoD
         private readonly ColoredVertexPositionNormal[] Reference;
         internal float Scale = 1f;
 
+        public void Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unload()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(GameTime gameTime)
         {
             Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;

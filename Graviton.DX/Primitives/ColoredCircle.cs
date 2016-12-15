@@ -10,8 +10,6 @@ namespace Graviton.XNA.Primitives
 {
     public class ColoredCirclePrimitive : GeometricPrimitive
     {
-        
-
         public ColoredCirclePrimitive(GraphicsDevice graphicsDevice, float diameter, int tessellation, Color centerColor, Color edgeColor)
         {
             if (tessellation < 3)

@@ -83,6 +83,18 @@ namespace Graviton.DX.Players
             
         }
 
+        public void Load()
+        {
+            Face.Load();
+            IsLoaded = true;
+        }
+
+        public void Unload()
+        {
+            Face.Unload();
+            IsLoaded = false;
+        }
+
         public void Update(GameTime gameTime)
         {
             //Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -95,6 +107,7 @@ namespace Graviton.DX.Players
 
         public void Draw(Matrix view, Matrix projection)
         {
+            if (!IsLoaded) Load();
             Face.Rotation = Rotation;
             Face.Scale = Radius;
             Face.Position = Position;
@@ -104,6 +117,7 @@ namespace Graviton.DX.Players
         public QuadTree<IMovable3>.Quad Quad;
         internal bool DrawTexture;
         private GraphicsDevice Graphics;
+        private bool IsLoaded;
 
         public void Dispose()
         {

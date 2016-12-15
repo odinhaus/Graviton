@@ -154,7 +154,6 @@ namespace Graviton.Common.Indexing
             {
                 Items = new List<T>();
             }
-
             public RectangleF Bounds;
             public Quad[,] Quads;
             public bool IsLeaf { get { return Quads == null; } }

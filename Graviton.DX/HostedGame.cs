@@ -45,6 +45,7 @@ namespace Graviton.DX
         private Texture2D _gold;
         private QuadTree<IMovable3> _index;
         private Dictionary<long, Matter> _matter = new Dictionary<long, Matter>();
+        private List<QuadTree<IMovable3>.Quad> _quads = new List<QuadTree<IMovable3>.Quad>();
 
         public HostedGame()
         {
@@ -133,11 +134,13 @@ namespace Graviton.DX
                 }
 
                 var matter = new Matter(GraphicsDevice, new Vector3(r.X, -2f, r.Y), new Vector3(r.Vx, 0, r.Vy), r.Mass, Matrix.CreateRotationY(r.Angle), texture);
-                lock (_index)
+                matter.Quad = _index.FindFirst(matter.BoundingBox);
+
+                lock (matter.Quad.Items)
                 {
-                    matter.Quad = _index.FindFirst(matter.BoundingBox);
                     matter.Quad.Items.Add(matter);
                 }
+
                 matter.DrawTexture = true;
                 _matter.Add(r.Id, matter);
             }
@@ -148,7 +151,7 @@ namespace Graviton.DX
                 matter.Velocity = new Vector3(r.Vx, 0, r.Vy);
                 if (!matter.Quad.Bounds.Intersects(matter.BoundingBox))
                 {
-                    lock (_index)
+                    lock (matter.Quad.Items)
                     {
                         matter.Quad.Items.Remove(matter);
                         matter.Quad.Items.Add(matter);
@@ -169,7 +172,6 @@ namespace Graviton.DX
                 _stars = new Circle[550];
                 for (int i = 0; i < _stars.Length; i++)
                 {
-
                     var star = new Circle(GraphicsDevice, 1.5f, 8, Color.White, Color.White);
                     if (i < 75)
                         star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 4f, RandomFloat(random, -r.WorldSize, r.WorldSize));
@@ -190,17 +192,25 @@ namespace Graviton.DX
             if (r.WorldSize != _worldSize)
             {
                 _worldSize = r.WorldSize;
-                _gameCamera = new Camera(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 0.01f, _worldSize * 8);
+                _gameCamera = new Camera(MathHelper.PiOver4, GraphicsDevice.Viewport.AspectRatio, 0.1f, _worldSize * 8);
                 _gameCamera.ZoomOut(15);
                 _gameCamera.Range.Position.Max = new Vector3(_worldSize, _worldSize / 4f, _worldSize);
                 _gameCamera.Range.Position.Min = new Vector3(0, 2, 0);
             }
 
-            var frustrum = new BoundingFrustum(_gameCamera.View * _gameCamera.Projection);
-            var corners = frustrum.GetCorners();
-            this.ViewPort = GetViewRect(corners, frustrum.Near.D);
+            //var frustrum = new BoundingFrustum(_gameCamera.View * _gameCamera.Projection);
+            //var corners = frustrum.GetCorners();
+            this.ViewPort = GetViewRect(_gameCamera);
 
             this.ServerEpoch = r.Epoch;
+        }
+
+        private RectangleF GetViewRect(Camera _gameCamera)
+        {
+            var z = _gameCamera.Position.Y;
+            var h = (float)(2f * z * Math.Tan(_gameCamera.FoV));
+            var w = (float)(h * _gameCamera.AR);
+            return new RectangleF() { X = _gameCamera.Position.X - w / 2f, Y = _gameCamera.Position.Z - h / 2f, Width = w, Height = h };
         }
 
         protected override void LoadContent()
@@ -375,42 +385,63 @@ namespace Graviton.DX
 
             if (IsReady)
             {
-                lock (_index)
+                var quads = _index.FindAll(ViewPort).ToArray();
+                foreach (var quad in quads)
                 {
-                    foreach (var item in _index.FindAll(ViewPort).SelectMany(q => q.Items).ToArray())
+                    lock (quad.Items)
                     {
-                        item.Draw(_gameCamera.View, _gameCamera.Projection);
+                        foreach (var item in quad.Items)
+                        {
+                            item.Draw(_gameCamera.View, _gameCamera.Projection);
+                        }
+                    }
+                    if (!_quads.Contains(quad))
+                    {
+                        _quads.Add(quad);
                     }
                 }
+
+                foreach(var oldQuad in _quads.ToArray())
+                {
+                    if (!quads.Contains(oldQuad))
+                    {
+                        foreach(var item in oldQuad.Items)
+                        {
+                            item.Unload();
+                        }
+                        _quads.Remove(oldQuad);
+                    }
+                }
+
                 _disc.Draw(_gameCamera.View, _gameCamera.Projection);
             }
             base.Draw(gameTime);
         }
 
-        private RectangleF GetViewRect(Vector3[] corners, float planeDepth)
-        {
-            if (float.IsNaN(corners[4].X))
-            {
-                corners[4] = new Vector3(_worldSize, _worldSize, _worldSize);
-                corners[5] = corners[4];
-                corners[6] = corners[4];
-                corners[7] = corners[4];
-            }
+        //private RectangleF GetViewRect(Vector3[] corners, float planeDepth)
+        //{
+        //    if (float.IsNaN(corners[4].X))
+        //    {
+        //        corners[4] = new Vector3(_worldSize, _worldSize, _worldSize);
+        //        corners[5] = corners[4];
+        //        corners[6] = corners[4];
+        //        corners[7] = corners[4];
+        //    }
 
-            var ratio = (corners[0].Y - planeDepth) / (corners[0].Y - corners[4].Y);
+        //    var ratio = (corners[0].Y - planeDepth) / (corners[0].Y - corners[4].Y);
 
-            var tlX = ratio * (corners[4].X - corners[0].X) + corners[0].X;
-            var tlZ = ratio * (corners[5].Z - corners[1].Z) + corners[1].Z;
-            var w = ratio * (corners[5].X - corners[1].X) + corners[1].X - tlX;
-            var h = ratio * (corners[7].Z - corners[3].Z) + corners[3].Z - tlZ;
+        //    var tlX = ratio * (corners[4].X - corners[0].X) + corners[0].X;
+        //    var tlZ = ratio * (corners[5].Z - corners[1].Z) + corners[1].Z;
+        //    var w = ratio * (corners[5].X - corners[1].X) + corners[1].X - tlX;
+        //    var h = ratio * (corners[7].Z - corners[3].Z) + corners[3].Z - tlZ;
 
-            return new RectangleF()
-            {
-                X = tlX, 
-                Y = tlZ, 
-                Width = w,
-                Height = h,
-            };
-        }
+        //    return new RectangleF()
+        //    {
+        //        X = tlX, 
+        //        Y = tlZ, 
+        //        Width = w,
+        //        Height = h,
+        //    };
+        //}
     }
 }

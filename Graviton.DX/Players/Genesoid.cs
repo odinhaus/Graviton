@@ -59,6 +59,16 @@ namespace Graviton.XNA.Players
             BoundingSphere = new BoundingSphere(_pos, Radius);
         }
 
+        public void Load()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Unload()
+        {
+            throw new NotImplementedException();
+        }
+
         public float Mass { get; private set; }
 
         public float Radius

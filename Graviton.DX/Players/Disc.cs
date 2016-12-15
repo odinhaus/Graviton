@@ -43,18 +43,35 @@ namespace Graviton.XNA.Players
         //Arc face;
         Arc tracking;
         internal bool DrawTexture;
+        private GraphicsDevice Graphics;
+        private Texture2D Texture;
+        private bool IsLoaded;
 
         public Disc(GraphicsDevice graphics, float mass, Texture2D texture)
         {
             Mass = mass;
-
+            Graphics = graphics;
+            Texture = texture;
             //edge = new Circle(graphics, Radius + 0.03f, 48, Color.White, new Color(255, 255, 255, 0));
             //edge = new Arc(graphics, Radius, 64, 0.15f, FillStyle.Center, 0f, (float)Math.PI * 2f, Color.White, 0.05f, Color.TransparentBlack, 0f, Color.TransparentBlack);
-            face = new TexturedCircle(graphics, Radius * 1f, 48, texture);
-            face.Rotation = Matrix.CreateRotationY(0f);
+           
             //edge.Position = new Vector3(0f, -0.2f, 0f);
-            tracking = new Arc(graphics, Radius, 64, Radius / 12f, Primitives.FillStyle.Outside, (float)(5f * Math.PI / 4f), (float)(Math.PI / 2f), Color.HotPink, Radius / 12f, Color.Transparent, Radius / 12f, Color.Transparent);
+            //tracking = new Arc(graphics, Radius, 64, Radius / 12f, Primitives.FillStyle.Outside, (float)(5f * Math.PI / 4f), (float)(Math.PI / 2f), Color.HotPink, Radius / 12f, Color.Transparent, Radius / 12f, Color.Transparent);
             BoundingSphere = new BoundingSphere(_pos, Radius);
+            face = new TexturedCircle(Graphics, Radius * 1f, 48, Texture);
+            face.Rotation = Matrix.CreateRotationY(0f);
+        }
+
+        public void Load()
+        {
+            face.Load();
+            IsLoaded = true;
+        }
+
+        public void Unload()
+        {
+            face.Unload();
+            IsLoaded = false;
         }
 
         public float Mass { get; set; }
@@ -89,6 +106,7 @@ namespace Graviton.XNA.Players
 
         public void Draw(Matrix view, Matrix projection)
         {
+            if (!IsLoaded) Load();
             //edge.Draw(view, projection);
             if (DrawTexture)
                 face.Draw(view, projection);

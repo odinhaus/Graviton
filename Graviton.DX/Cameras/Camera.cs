@@ -43,7 +43,8 @@ namespace Graviton.XNA.Cameras
 
     public class Camera
     {
-        private float FOV;
+        private float _FOV;
+        private float _AR;
         private float NearPlane;
         private float FarPlane;
 
@@ -51,7 +52,8 @@ namespace Graviton.XNA.Cameras
         {
             Position = Vector3.Zero;
             Velocity = Vector3.Zero;
-            FOV = fov;
+            _FOV = fov;
+            _AR = ar;
             NearPlane = nearPlane;
             FarPlane = farPlane;
             Projection = Matrix.CreatePerspectiveFieldOfView(
@@ -86,6 +88,9 @@ namespace Graviton.XNA.Cameras
             Theta = SetTheta(Position);
         }
 
+        public float FoV { get { return _FOV; } }
+        public float AR { get { return _AR; } }
+
         public Vector3 Position { get; private set; }
         public Vector3 Velocity { get; set; }
         public Matrix View { get; private set; }
@@ -99,7 +104,7 @@ namespace Graviton.XNA.Cameras
         public void SetAspectRatio(float ar)
         {
             Projection = Matrix.CreatePerspectiveFieldOfView(
-                    FOV, ar, NearPlane, FarPlane);
+                    _FOV, ar, NearPlane, FarPlane);
         }
 
         public void Update(GameTime gameTime)
