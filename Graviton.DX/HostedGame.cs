@@ -37,7 +37,7 @@ namespace Graviton.DX
         private RenderTarget2D _renderTarget1;
         private RenderTarget2D _renderTarget2;
         private bool _resizing;
-        private Circle[] _stars = new Circle[0];
+        //private Circle[] _stars = new Circle[0];
         bool _isFirstRequest = true;
         private SpriteFont _font;
         private Disc _disc;
@@ -46,6 +46,7 @@ namespace Graviton.DX
         private QuadTree<IMovable3> _index;
         private Dictionary<long, Matter> _matter = new Dictionary<long, Matter>();
         private List<QuadTree<IMovable3>.Quad> _quads = new List<QuadTree<IMovable3>.Quad>();
+        private Random _r = new Random();
 
         public HostedGame()
         {
@@ -95,6 +96,7 @@ namespace Graviton.DX
             if (r.Requestor == Requester)
             {
                 _disc.Velocity = new Vector3(r.Vx, 0, r.Vy);
+                _disc.Position = new Vector3(r.X, _disc.Position.Y, r.Y);
                 _disc.Mass = r.Mass;
                 _disc.Update(GameTime);
 
@@ -133,7 +135,7 @@ namespace Graviton.DX
                         }
                 }
 
-                var matter = new Matter(GraphicsDevice, new Vector3(r.X, -2f, r.Y), new Vector3(r.Vx, 0, r.Vy), r.Mass, Matrix.CreateRotationY(r.Angle), texture);
+                var matter = new Matter(GraphicsDevice, new Vector3(r.X, -2f, r.Y), new Vector3(r.Vx, RandomFloat(_r, -10f, -0.1f), r.Vy), r.Mass, Matrix.CreateRotationY(r.Angle), texture);
                 matter.Quad = _index.FindFirst(matter.BoundingBox);
 
                 lock (matter.Quad.Items)
@@ -147,7 +149,7 @@ namespace Graviton.DX
             else
             {
                 var matter = _matter[r.Id];
-                matter.Position = new Vector3(r.X, 0, r.Y);
+                matter.Position = new Vector3(r.X, matter.Position.Y, r.Y);
                 matter.Velocity = new Vector3(r.Vx, 0, r.Vy);
                 if (!matter.Quad.Bounds.Intersects(matter.BoundingBox))
                 {
@@ -169,24 +171,24 @@ namespace Graviton.DX
             {
                 _index = new QuadTree<IMovable3>(6, new RectangleF() { X = -r.WorldSize, Y = -r.WorldSize, Width = r.WorldSize * 2f, Height = r.WorldSize * 2f });
                 Random random = new Random();
-                _stars = new Circle[550];
-                for (int i = 0; i < _stars.Length; i++)
-                {
-                    var star = new Circle(GraphicsDevice, 1.5f, 8, Color.White, Color.White);
-                    if (i < 75)
-                        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 4f, RandomFloat(random, -r.WorldSize, r.WorldSize));
-                    else if (i < 175)
-                        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 5.5f, RandomFloat(random, -r.WorldSize, r.WorldSize));
-                    else
-                        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 7f, RandomFloat(random, -r.WorldSize, r.WorldSize));
-                    //star.Position = new Vector3(10, -10, 10);
-                    star.Velocity = Vector3.Zero;
-                    _stars[i] = star;
-                    lock (_index)
-                    {
-                        _index.FindFirst(star.BoundingBox).Items.Add(star);
-                    }
-                }
+                //_stars = new Circle[550];
+                //for (int i = 0; i < _stars.Length; i++)
+                //{
+                //    var star = new Circle(GraphicsDevice, 1.5f, 8, Color.White, Color.White);
+                //    if (i < 75)
+                //        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 4f, RandomFloat(random, -r.WorldSize, r.WorldSize));
+                //    else if (i < 175)
+                //        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 5.5f, RandomFloat(random, -r.WorldSize, r.WorldSize));
+                //    else
+                //        star.Position = new Vector3(RandomFloat(random, -r.WorldSize, r.WorldSize), -r.WorldSize / 7f, RandomFloat(random, -r.WorldSize, r.WorldSize));
+                //    //star.Position = new Vector3(10, -10, 10);
+                //    star.Velocity = Vector3.Zero;
+                //    _stars[i] = star;
+                //    lock (_index)
+                //    {
+                //        _index.FindFirst(star.BoundingBox).Items.Add(star);
+                //    }
+                //}
             }
 
             if (r.WorldSize != _worldSize)
@@ -382,7 +384,7 @@ namespace Graviton.DX
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.TransparentBlack);
-
+            
             if (IsReady)
             {
                 var quads = _index.FindAll(ViewPort).ToArray();
@@ -405,11 +407,14 @@ namespace Graviton.DX
                 {
                     if (!quads.Contains(oldQuad))
                     {
-                        foreach(var item in oldQuad.Items)
+                        lock (oldQuad.Items)
                         {
-                            item.Unload();
+                            foreach (var item in oldQuad.Items)
+                            {
+                                item.Unload();
+                            }
+                            _quads.Remove(oldQuad);
                         }
-                        _quads.Remove(oldQuad);
                     }
                 }
 

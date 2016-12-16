@@ -71,7 +71,7 @@ namespace Graviton.DX.Players
                 Position = position,
                 Velocity = velocity,
                 Scale = 1f,
-                Color = Color.Yellow
+                Color = Color.TransparentBlack
             };
             Position = position;
             Velocity = velocity;

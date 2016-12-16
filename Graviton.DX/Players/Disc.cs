@@ -89,8 +89,8 @@ namespace Graviton.XNA.Players
 
         public void Update(GameTime gameTime)
         {
-            Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
-            _pos += dp;
+            //Vector3 dp = Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //_pos += dp;
             BoundingSphere = new BoundingSphere(_pos, Radius);
             //edge.Update(gameTime);
             face.Update(gameTime);

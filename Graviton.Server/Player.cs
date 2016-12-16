@@ -63,14 +63,23 @@ namespace Graviton.Server
             LastUpdate = gameTime.Epoch;
             if (Vx != 0f || Vy != 0f)
             {
+                if (X == Game.WorldSize && Vx > 0) Vx = 0;
+                if (X == -Game.WorldSize && Vx < 0) Vx = 0;
+                if (Y == Game.WorldSize && Vy > 0) Vx = 0;
+                if (Y == -Game.WorldSize && Vy < 0) Vx = 0;
+
                 var dx = Vx * (float)gameTime.EpochGameTime.TotalSeconds;
                 var dy = Vy * (float)gameTime.EpochGameTime.TotalSeconds;
                 X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
                 Y = (Y + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
+
+                X = X.Clamp(-Game.WorldSize, Game.WorldSize);
+                Y = Y.Clamp(-Game.WorldSize, Game.WorldSize);
+
                 Bounds = new RectangleF()
                 {
-                    X = Bounds.X + dx,
-                    Y = Bounds.Y + dy,
+                    X = X - Bounds.Width / 2f,
+                    Y = Y - Bounds.Height / 2f,
                     Width = Bounds.Width,
                     Height = Bounds.Height
                 };

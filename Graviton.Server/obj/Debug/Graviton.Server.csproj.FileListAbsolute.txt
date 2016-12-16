@@ -3,3 +3,4 @@ D:\Code\Altus\Graviton\Graviton.Server\bin\Debug\Graviton.Server.exe
 D:\Code\Altus\Graviton\Graviton.Server\bin\Debug\Graviton.Server.pdb
 D:\Code\Altus\Graviton\Graviton.Server\obj\Debug\Graviton.Server.exe
 D:\Code\Altus\Graviton\Graviton.Server\obj\Debug\Graviton.Server.pdb
+D:\Code\Altus\Graviton\Graviton.Server\obj\Debug\Graviton.Server.csprojResolveAssemblyReference.cache

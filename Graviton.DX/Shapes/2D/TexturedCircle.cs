@@ -85,7 +85,7 @@ namespace Graviton.XNA.Shapes.TwoD
 
         public void Update(GameTime gameTime)
         {
-            Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //Position += Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             //_frame++;
 
             //var alpha = (_frame / 15d) / Math.PI;

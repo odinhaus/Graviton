@@ -4,6 +4,7 @@ using Graviton.Server.Net;
 using Graviton.Server.Processing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,15 +13,18 @@ namespace Graviton.Server
 {
     public static class Game
     {
-        static float _maxSpeed = 50f;
-        static float _worldSize = 500000f;
+        public const float MaxSpeed = 50f;
+        public const float WorldSize = 500000;
         static ulong _requester = 0;
-        static RectangleF _worldBounds = new RectangleF() { X = -_worldSize, Y = -_worldSize, Height = _worldSize * 2f, Width = _worldSize * 2f };
+        static RectangleF _worldBounds = new RectangleF() { X = -WorldSize, Y = -WorldSize, Height = WorldSize * 2f, Width = WorldSize * 2f };
         static QuadTree<IMovable> _quadTree = new QuadTree<IMovable>(6, _worldBounds);
         static Dictionary<ulong, Player> _players = new Dictionary<ulong, Player>();
         static List<IMovable> _updatables = new List<IMovable>();
         static List<IMovable> _moving = new List<IMovable>();
         static int _matterCount = 500000;
+        const float G = 5e+04f;
+        const float DRAG = 32.8f;
+        const float MinV = 0.4f;
 
 
         static Game()
@@ -35,14 +39,14 @@ namespace Graviton.Server
             {
                 var matter = new Matter(UserInputs.GameTime, _worldBounds);
                 matter.MatterType = MatterType.Gold;
-                matter.X = RandomFloat(r, -_worldSize, _worldSize);
-                matter.Y = RandomFloat(r, -_worldSize, _worldSize);
+                matter.X = RandomFloat(r, -WorldSize + 20f, WorldSize - 20f);
+                matter.Y = RandomFloat(r, -WorldSize + 20f, WorldSize - 20f);
                 matter.Vx = 0;
                 matter.Vy = 0;
                 matter.Angle = RandomFloat(r, 0, (float)Math.PI * 2f);
                 matter.FirstUpdate = UserInputs.GameTime.Epoch;
                 matter.LastUpdate = UserInputs.GameTime.Epoch;
-                matter.Mass = (uint)r.Next(5000, 25000);
+                matter.Mass = (uint)r.Next(2000, 12500);
                 var width = 2f * (16f * (float)Math.Tanh(matter.Mass / 50000f) + 0.02f);
                 matter.Bounds = new RectangleF()
                 {
@@ -121,8 +125,8 @@ namespace Graviton.Server
 
         private static void MovePlayer(GameTime gameTime, Player player, PlayerRequest request)
         {
-            player.Vx = request.Vector_X * _maxSpeed;
-            player.Vy = request.Vector_Y * _maxSpeed;
+            player.Vx = request.Vector_X * MaxSpeed;
+            player.Vy = request.Vector_Y * MaxSpeed;
         }
 
         private static void ProcessKeyboardInput(GameTime gameTime, Player player, ulong keyStateMask)
@@ -149,13 +153,23 @@ namespace Graviton.Server
 
         public static void Update(GameTime gameTime)
         {
+            UpdateGravity(gameTime);
+
             for(int i = _moving.Count - 1; i >= 0 ; i--)
             {
                 var updatable = _moving[i];
-                if ( updatable.IsNew || ( updatable.Vx != 0f && updatable.Vy != 0f))
+                if ( updatable.IsNew 
+                    || ( updatable.Vx != 0f && updatable.Vy != 0f)
+                    || (updatable is Matter && ((Matter)updatable).Fx != 0f && ((Matter)updatable).Fy != 0f))
                 {
+                    UpdateDrag(gameTime, updatable);
+
                     updatable.Update(gameTime);
 
+                    if (updatable.Vx < MinV && updatable.Vx > -MinV)
+                        updatable.Vx = 0;
+                    if (updatable.Vy < MinV && updatable.Vy > -MinV)
+                        updatable.Vy = 0;
 
                     if (updatable.Quad != null && !updatable.Quad.Bounds.Intersects(updatable.Bounds))
                     {
@@ -181,6 +195,65 @@ namespace Graviton.Server
             }
         }
 
+        private static void UpdateDrag(GameTime gameTime, IMovable item)
+        {
+            if (item is Matter)
+            {
+                var matter = (Matter)item;
+                if (matter.Vx != 0f)
+                    matter.Fx += matter.Vx * matter.Vx * DRAG * (float)Math.Sign(matter.Vx) * -1f;
+                if (matter.Vy != 0f)
+                    matter.Fy += matter.Vy * matter.Vy * DRAG * (float)Math.Sign(matter.Vy) * -1f;
+            }
+        }
+
+        private static void UpdateGravity(GameTime gameTime)
+        {
+            Player[] players;
+            lock (_players)
+            {
+                players = _players.Values.ToArray();
+            }
+
+            for (int i = 0; i < players.Length; i++)
+            {
+                var player = players[i];
+                var gThresh = (float)Math.Sqrt(G * player.Mass); // maximum distance to still produce an acceleration of 1 unit/s^2
+                var quads = _quadTree.FindAll(new RectangleF() { X = player.X - gThresh / 2f, Y = player.Y - gThresh / 2f, Width = gThresh, Height = gThresh });
+                var dMin = float.MaxValue;
+                foreach (var quad in quads)
+                {
+                    Matter[] matter;
+                    lock (quad.Items)
+                    {
+                        matter = quad.Items.OfType<Matter>().ToArray();
+                    }
+                    for(int m = 0; m < matter.Length; m++)
+                    {
+                        var mm = matter[m];
+                        float dx = player.X - mm.X, dy = player.Y - mm.Y;
+                        var dsquared =(dx*dx + dy*dy).Clamp(1f, float.MaxValue);
+                        var d = (float)Math.Sqrt(dsquared);
+                        if (d <= gThresh)
+                        {
+                            float rx = dx / d, ry = dy / d;
+                            var f = G * player.Mass / dsquared;
+                            mm.Fx += rx * f;
+                            mm.Fy += ry * f;
+                            if (!_moving.Contains(mm))
+                            {
+                                _moving.Add(mm);
+                            }
+
+                            if (dsquared < dMin)
+                                dMin = dsquared;
+                        }
+                    }
+                }
+                Debug.WriteLine(dMin);
+            }
+        }
+
         public static IEnumerable<ICanSerialize> GetUserUpdates(GameTime gameTime, Player requester)
         {
             yield return new GameStateResponse()
@@ -189,7 +262,7 @@ namespace Graviton.Server
                 T = gameTime.TotalGameTime.TotalSeconds,
                 dT = gameTime.EpochGameTime.TotalSeconds,
                 TimespanTicks = gameTime.TotalGameTime.Ticks,
-                WorldSize = _worldSize,
+                WorldSize = WorldSize,
                 IsValid = true
             };
 

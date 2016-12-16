@@ -32,6 +32,8 @@ namespace Graviton.Server
         public long Id { get { return m._Id; } set { m._Id = value; } }
         public RectangleF Bounds { get { return m._Bounds; } set { m._Bounds = value; } }
         public MatterType MatterType { get { return m._Type; } set { m._Type = value; } }
+        public float Fx;
+        public float Fy;
         public float Vx { get { return m._Vx; } set { m._Vx = value; } }
         public float Angle { get { return m._Angle; } set { m._Angle = value; } }
         public float Vy { get { return m._Vy; } set { m._Vy = value; } }
@@ -55,21 +57,34 @@ namespace Graviton.Server
 
         public void Update(GameTime gameTime)
         {
+            Vx += (Fx * (float)gameTime.EpochGameTime.TotalSeconds / Mass).Clamp(-Game.MaxSpeed, Game.MaxSpeed);
+            Vy += (Fy * (float)gameTime.EpochGameTime.TotalSeconds / Mass).Clamp(-Game.MaxSpeed, Game.MaxSpeed);
             if (Vx != 0f || Vy != 0f)
             {
                 LastUpdate = gameTime.Epoch;
+                if (X == Game.WorldSize && Vx > 0) Vx = 0;
+                if (X == -Game.WorldSize && Vx < 0) Vx = 0;
+                if (Y == Game.WorldSize && Vy > 0) Vy = 0;
+                if (Y == -Game.WorldSize && Vy < 0) Vy = 0;
+
                 var dx = Vx * (float)gameTime.EpochGameTime.TotalSeconds;
                 var dy = Vy * (float)gameTime.EpochGameTime.TotalSeconds;
-                X += dx;
-                Y += dy;
+                X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
+                Y = (Y + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
+
+                X = X.Clamp(-Game.WorldSize, Game.WorldSize);
+                Y = Y.Clamp(-Game.WorldSize, Game.WorldSize);
+
                 Bounds = new RectangleF()
                 {
-                    X = Bounds.X + dx,
-                    Y = Bounds.Y + dy,
+                    X = X - Bounds.Width / 2f,
+                    Y = Y - Bounds.Height / 2f,
                     Width = Bounds.Width,
                     Height = Bounds.Height
                 };
             }
+            Fx = 0;
+            Fy = 0;
         }
 
         public byte[] Serialize()

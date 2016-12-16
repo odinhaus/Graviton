@@ -238,7 +238,21 @@ namespace Graviton.XNA.Primitives
             if (color.A < 255)
             {
                 // Set renderstates for alpha blended rendering.
+                //var blend = new BlendState()
+                //{
+                //    AlphaBlendFunction = BlendFunction.Add,
+                //    AlphaSourceBlend = Blend.SourceAlpha,
+                //    AlphaDestinationBlend = Blend.InverseSourceAlpha,
+                //};
+                //device.BlendState = blend; // BlendState.AlphaBlend;
+                //var stencil = new DepthStencilState()
+                //{
+                //    DepthBufferEnable = true,
+                //    DepthBufferWriteEnable = false,
+                //};
+                //device.DepthStencilState = stencil;
                 device.BlendState = BlendState.AlphaBlend;
+                
             }
             else
             {

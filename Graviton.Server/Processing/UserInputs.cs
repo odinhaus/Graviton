@@ -101,7 +101,7 @@ namespace Graviton.Server.Processing
             _count++;
             if (_count % 240 == 0)
             {
-                Console.WriteLine(dt + ", " + _dt);
+                Console.WriteLine("Current: " + dt + ", Avg: " + _dt);
             }
             PlayerRequest[] requests;
             lock(_requests)
