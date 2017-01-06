@@ -32,17 +32,40 @@ namespace Graviton.Server
         public long Id { get { return m._Id; } set { m._Id = value; } }
         public RectangleF Bounds { get { return m._Bounds; } set { m._Bounds = value; } }
         public MatterType MatterType { get { return m._Type; } set { m._Type = value; } }
-        public float Fx;
-        public float Fy;
+        public float Fx { get; set; }
+        public float Fy { get; set; }
         public float Vx { get { return m._Vx; } set { m._Vx = value; } }
         public float Angle { get { return m._Angle; } set { m._Angle = value; } }
         public float Vy { get { return m._Vy; } set { m._Vy = value; } }
         public float X { get { return m._X; } set { m._X = value; } }
         public float Y { get { return m._Y; } set { m._Y = value; } }
-        public float Mass { get { return m._Mass; } set { m._Mass = value; } }
+        public float Mass
+        {
+            get { return m._Mass; }
+            set
+            {
+                m._Mass = value;
+                var radius = Radius;
+                Bounds = new RectangleF()
+                {
+                    X = X - radius,
+                    Y = Y - radius,
+                    Width = radius * 2f,
+                    Height = radius * 2f
+                };
+            }
+        }
         public ulong FirstUpdate { get { return m._FirstUpdate; } set { m._FirstUpdate = value; } }
         public ulong LastUpdate { get { return m._LastUpdate; } set { m._LastUpdate = value; } }
         public bool IsValid { get { return m._IsValid; } set { m._IsValid = value; } }
+
+        public float Radius
+        {
+            get
+            {
+                return 80f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
+            }
+        }
 
         public RectangleF WorldBounds { get; set; }
         public QuadTree<IMovable>.Quad Quad { get; set; }
@@ -57,34 +80,46 @@ namespace Graviton.Server
 
         public void Update(GameTime gameTime)
         {
-            Vx += (Fx * (float)gameTime.EpochGameTime.TotalSeconds / Mass).Clamp(-Game.MaxSpeed, Game.MaxSpeed);
-            Vy += (Fy * (float)gameTime.EpochGameTime.TotalSeconds / Mass).Clamp(-Game.MaxSpeed, Game.MaxSpeed);
+            Vx += Fx * (float)gameTime.EpochGameTime.TotalSeconds / Mass;
+            Vy += Fy * (float)gameTime.EpochGameTime.TotalSeconds / Mass;
+            Vx = Vx.Clamp(-Game.MaxSpeed, Game.MaxSpeed);
+            Vy = Vy.Clamp(-Game.MaxSpeed, Game.MaxSpeed);
             if (Vx != 0f || Vy != 0f)
             {
                 LastUpdate = gameTime.Epoch;
-                if (X == Game.WorldSize && Vx > 0) Vx = 0;
-                if (X == -Game.WorldSize && Vx < 0) Vx = 0;
-                if (Y == Game.WorldSize && Vy > 0) Vy = 0;
-                if (Y == -Game.WorldSize && Vy < 0) Vy = 0;
-
+                
                 var dx = Vx * (float)gameTime.EpochGameTime.TotalSeconds;
                 var dy = Vy * (float)gameTime.EpochGameTime.TotalSeconds;
-                X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
-                Y = (Y + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
+                Bounce(dx, dy);
 
-                X = X.Clamp(-Game.WorldSize, Game.WorldSize);
-                Y = Y.Clamp(-Game.WorldSize, Game.WorldSize);
+                var radius = Radius;
 
                 Bounds = new RectangleF()
                 {
-                    X = X - Bounds.Width / 2f,
-                    Y = Y - Bounds.Height / 2f,
-                    Width = Bounds.Width,
-                    Height = Bounds.Height
+                    X = X - radius,
+                    Y = Y - radius,
+                    Width = radius * 2f,
+                    Height = radius * 2f
                 };
             }
             Fx = 0;
             Fy = 0;
+        }
+
+        private void Bounce(float dx, float dy)
+        {
+            if (X + dx > WorldBounds.X + WorldBounds.Width || X + dx < WorldBounds.X)
+            {
+                dx = -dx;
+                Vx = -Vx;
+            }
+            if (Y + dy > WorldBounds.Y + WorldBounds.Height || Y + dy < WorldBounds.Y)
+            {
+                dy = -dy;
+                Vy = -Vy;
+            }
+            X += dx;
+            Y += dy;
         }
 
         public byte[] Serialize()

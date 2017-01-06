@@ -39,8 +39,25 @@ namespace Graviton.Server
         public float Vy { get { return _p._Vy; } set { _p._Vy = value; } }
         public float X { get { return _p._X; } set { _p._X = value; } }
         public float Y { get { return _p._Y; } set { _p._Y = value; } }
+        public float Fx { get; set; }
+        public float Fy { get; set; }
         public bool IsValid { get { return _p._IsValid; } set { _p._IsValid = value; } }
-        public float Mass { get { return _p._Mass; } set { _p._Mass = value; } }
+        public float Mass
+        {
+            get { return _p._Mass; }
+            set
+            {
+                _p._Mass = value;
+                var radius = Radius;
+                Bounds = new RectangleF()
+                {
+                    X = X - radius,
+                    Y = Y - radius,
+                    Width = radius * 2f,
+                    Height = radius * 2f
+                };
+            }
+        }
         public ulong Requester { get { return _p._Requester; } set { _p._Requester = value; } }
         public ulong FirstUpdate { get { return _p._FirstUpdate; } set { _p._FirstUpdate = value; } }
         public ulong LastUpdate { get { return _p._LastUpdate; } set { _p._LastUpdate = value; } }
@@ -49,6 +66,13 @@ namespace Graviton.Server
         public RectangleF ViewPort { get; set; }
         public SocketState SocketState { get; set; }
         public QuadTree<IMovable>.Quad Quad { get; set; }
+        public float Radius
+        {
+            get
+            {
+                return 80f * (float)Math.Tanh(Mass / 500f) + 0.02f;
+            }
+        }
 
         public ushort Type
         {
@@ -61,6 +85,10 @@ namespace Graviton.Server
         public void Update(GameTime gameTime)
         {
             LastUpdate = gameTime.Epoch;
+            Vx += Fx * (float)gameTime.EpochGameTime.TotalSeconds / Mass;
+            Vy += Fy * (float)gameTime.EpochGameTime.TotalSeconds / Mass;
+            Vx = Vx.Clamp(-Game.MaxSpeed, Game.MaxSpeed);
+            Vy = Vy.Clamp(-Game.MaxSpeed, Game.MaxSpeed);
             if (Vx != 0f || Vy != 0f)
             {
                 if (X == Game.WorldSize && Vx > 0) Vx = 0;
@@ -73,16 +101,16 @@ namespace Graviton.Server
                 X = (X + dx).Clamp(WorldBounds.X, WorldBounds.X + WorldBounds.Width);
                 Y = (Y + dy).Clamp(WorldBounds.Y, WorldBounds.Y + WorldBounds.Height);
 
-                X = X.Clamp(-Game.WorldSize, Game.WorldSize);
-                Y = Y.Clamp(-Game.WorldSize, Game.WorldSize);
+                var radius = Radius;
 
                 Bounds = new RectangleF()
                 {
-                    X = X - Bounds.Width / 2f,
-                    Y = Y - Bounds.Height / 2f,
-                    Width = Bounds.Width,
-                    Height = Bounds.Height
+                    X = X - radius,
+                    Y = Y - radius,
+                    Width = radius * 2f,
+                    Height = radius * 2f
                 };
+
                 ViewPort = new RectangleF()
                 {
                     X = ViewPort.X + dx,
@@ -91,6 +119,8 @@ namespace Graviton.Server
                     Height = ViewPort.Height
                 };
             }
+            Fx = 0;
+            Fy = 0;
         }
 
         public byte[] Serialize()

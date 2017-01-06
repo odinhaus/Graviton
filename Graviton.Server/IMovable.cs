@@ -14,6 +14,10 @@ namespace Graviton.Server
         float Y { get; set; }
         float Vx { get; set; }
         float Vy { get; set; }
+        float Fx { get; set; }
+        float Fy { get; set; }
+        float Radius { get; }
+        float Mass { get; }
         RectangleF Bounds { get; }
         QuadTree<IMovable>.Quad Quad { get; set; }
     }

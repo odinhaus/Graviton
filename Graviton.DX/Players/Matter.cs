@@ -19,7 +19,7 @@ namespace Graviton.DX.Players
         {
             get
             {
-                return 16f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
+                return 80f * (float)Math.Tanh(Mass / 50000f) + 0.02f;
             }
         }
 
@@ -66,7 +66,7 @@ namespace Graviton.DX.Players
         public Matter(GraphicsDevice graphics, Vector3 position, Vector3 velocity, float mass, Matrix rotation, Texture2D texture)
         {
             Mass = mass;
-            Face = new TexturedCircle(graphics, Radius, 16, texture)
+            Face = new TexturedCircle(graphics, 1f, 16, texture)
             {
                 Position = position,
                 Velocity = velocity,
@@ -76,7 +76,7 @@ namespace Graviton.DX.Players
             Position = position;
             Velocity = velocity;
            
-            BoundingSphere = new BoundingSphere(Position, Radius);
+            BoundingSphere = new BoundingSphere(Position, 1f);
             BoundingBox = new RectangleF() { X = Position.X - Radius, Y = Position.Z - Radius, Height = 2f * Radius, Width = 2f * Radius };
             Rotation = rotation;
             Graphics = graphics;

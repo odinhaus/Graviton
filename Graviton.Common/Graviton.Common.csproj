@@ -4,17 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{EE279306-924B-46D4-BFB5-C707DBF8DE56}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{FD0C92DD-6C19-4531-BB45-F587B8504F3A}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Graviton.Server</RootNamespace>
-    <AssemblyName>Graviton.Server</AssemblyName>
+    <RootNamespace>Graviton.Common</RootNamespace>
+    <AssemblyName>Graviton.Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,24 +20,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -49,37 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Diagnostics\Timer.cs" />
-    <Compile Include="Drawing\RectangleF.cs" />
-    <Compile Include="Drawing\SizeF.cs" />
-    <Compile Include="Extensions.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameTime.cs" />
-    <Compile Include="IMovable.cs" />
-    <Compile Include="Indexing\QuadTree.cs" />
-    <Compile Include="IUpdatable.cs" />
-    <Compile Include="Matter.cs" />
-    <Compile Include="Net\SocketState.cs" />
-    <Compile Include="Net\TcpHost.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Processing\AuthenticateRequest.cs" />
-    <Compile Include="Processing\AuthenticateResponse.cs" />
-    <Compile Include="Processing\GameStateResponse.cs" />
-    <Compile Include="Processing\ICanSerialize.cs" />
-    <Compile Include="Processing\ItemTypes.cs" />
-    <Compile Include="Processing\MatterStateResponse.cs" />
-    <Compile Include="Processing\PlayerStateResponse.cs" />
-    <Compile Include="Processing\UserInputs.cs" />
-    <Compile Include="Processing\PlayerRequest.cs" />
-    <Compile Include="Processing\Scheduler.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Endocrine.cs" />
+    <Compile Include="Neuron.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Serialization\IgnoreMarshaler.cs" />
-    <Compile Include="Threading\WorkerPool.cs" />
-    <Compile Include="Vector2d.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

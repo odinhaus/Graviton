@@ -15,6 +15,7 @@ namespace Graviton.XNA.Shapes.TwoD
         public Vector3 Position;
         public Vector3 Velocity;
         public Color Color = Color.White;
+        internal Matrix Rotation = Matrix.CreateRotationY(0f);
 
         public Line(GraphicsDevice graphics, float length, float thickness, int tesselation, Color color)
         {
@@ -28,7 +29,7 @@ namespace Graviton.XNA.Shapes.TwoD
 
         public void Draw(Matrix view, Matrix projection)
         {
-            primitive.Draw(Matrix.CreateTranslation(Position), view, projection, Color);
+            primitive.Draw(Rotation * Matrix.CreateTranslation(Position), view, projection, Color);
         }
     }
 }
